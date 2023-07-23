@@ -12,6 +12,7 @@ var database *gorm.DB
 // Account defines the Account record
 type Account struct {
 	ID                uuid.UUID `gorm:"type:uuid;primaryKey;"`
+	BearerToken       string
 	DigitalOceanToken string
 	Endpoints         []Endpoint `gorm:"foreignKey:AccountID"`
 }
@@ -47,4 +48,13 @@ func Connect() error {
 		return fmt.Errorf("schema automigration: %s", err)
 	}
 	return nil
+}
+
+func GetAccountByBearer(bearer string) (*Account, error) {
+	var account = Account{BearerToken: bearer}
+	result := database.First(&account)
+	if result.Error != nil {
+		return nil, fmt.Errorf("record not found: %s", result.Error)
+	}
+	return &account, nil
 }

@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"yvpn_server/db"
 	_ "yvpn_server/docs"
 )
@@ -95,7 +96,7 @@ func HandleCreateEndpoint(w http.ResponseWriter, r *http.Request) {
 	endpoint := db.Endpoint{
 		ID:         d.ID,
 		Datacenter: d.Region.Slug,
-		AccountID:  "",
+		AccountID:  r.Context().Value("account").(string),
 		IP:         dropletIP,
 	}
 
@@ -117,4 +118,31 @@ func HandleCreateEndpoint(w http.ResponseWriter, r *http.Request) {
 // @Router			/api/endpoint [get]
 func HandleGetEndpoints(w http.ResponseWriter, r *http.Request) {
 	//TODO:  Get userID from Bearer token, return all their endpoints from db
+}
+
+// CheckBearer is middleware that validates the bearer token
+func CheckBearer(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Get Authorization header
+		authHeader := r.Header.Get("Authorization")
+
+		// Split the header value by space
+		headerParts := strings.Split(authHeader, " ")
+
+		validFormat := len(headerParts) == 2 && strings.ToLower(headerParts[0]) == "bearer"
+		if !validFormat {
+			http.Error(w, "Invalid or missing Authorization header", http.StatusBadRequest)
+			return
+		}
+
+		account, err := db.GetAccountByBearer(headerParts[1])
+		if err != nil {
+			http.Error(w, "Invalid or missing Authorization header", http.StatusBadRequest)
+			return
+		}
+
+		// If all is good, call the next middleware or final handler
+		next.ServeHTTP(w, r.WithContext(
+			context.WithValue(r.Context(), "account", account.ID)))
+	})
 }
