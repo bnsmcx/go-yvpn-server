@@ -21,7 +21,7 @@ type Account struct {
 type Endpoint struct {
 	ID         int `gorm:"primaryKey"`
 	Datacenter string
-	AccountID  string
+	AccountID  uuid.UUID
 	IP         string
 }
 

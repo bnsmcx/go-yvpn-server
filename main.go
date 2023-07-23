@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/digitalocean/godo"
 	"github.com/go-chi/chi/v5"
+	"github.com/google/uuid"
 	httpSwagger "github.com/swaggo/http-swagger"
 	"log"
 	"net/http"
@@ -17,13 +18,13 @@ import (
 // @title yvpn API
 // @version 0.0.1
 // @description The public API for the yvpn server.
-
 // @contact.name bnsmcx
 // @contact.url https://github.com/bnsmcx/go-yvpn-server
-
+// @securityDefinitions.apikey	ApiKeyAuth
+// @in							header
+// @name						Authorization
 // @license.name TODO
 // @license.url TODO
-
 // @host localhost:8000
 // @BasePath /
 func main() {
@@ -39,8 +40,8 @@ func main() {
 	))
 
 	// API routes
-	r.Get("/api/endpoint", HandleGetEndpoints)
-	r.Post("/api/endpoint", HandleCreateEndpoint)
+	r.Get("/api/endpoint", CheckBearer(HandleGetEndpoints))
+	r.Post("/api/endpoint", CheckBearer(HandleCreateEndpoint))
 
 	http.ListenAndServe(":8000", r)
 }
@@ -53,6 +54,7 @@ type Datacenter struct {
 // @Summary		Create a new endpoint
 // @Description	create a new endpoint in the specified datacenter
 // @Tags		endpoint
+// @Security ApiKeyAuth
 // @Accept 		json
 // @Produce		text/plain
 // @param token body Datacenter true "Datacenter"
@@ -96,7 +98,7 @@ func HandleCreateEndpoint(w http.ResponseWriter, r *http.Request) {
 	endpoint := db.Endpoint{
 		ID:         d.ID,
 		Datacenter: d.Region.Slug,
-		AccountID:  r.Context().Value("account").(string),
+		AccountID:  r.Context().Value("account").(uuid.UUID),
 		IP:         dropletIP,
 	}
 
@@ -112,6 +114,7 @@ func HandleCreateEndpoint(w http.ResponseWriter, r *http.Request) {
 // @Summary		Get all endpoints
 // @Description	get all of a user's endpoints
 // @Tags			endpoint
+// @Security ApiKeyAuth
 // @Produce		json
 // @Success		200
 // @Failure		400
@@ -121,7 +124,7 @@ func HandleGetEndpoints(w http.ResponseWriter, r *http.Request) {
 }
 
 // CheckBearer is middleware that validates the bearer token
-func CheckBearer(next http.Handler) http.Handler {
+func CheckBearer(next http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Get Authorization header
 		authHeader := r.Header.Get("Authorization")
