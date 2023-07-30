@@ -11,8 +11,10 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"yvpn_server/auth"
 	"yvpn_server/db"
 	_ "yvpn_server/docs"
+	"yvpn_server/ux"
 )
 
 // @title yvpn API
@@ -39,11 +41,34 @@ func main() {
 		httpSwagger.URL("http://localhost:8000/docs/doc.json"), //The url pointing to API definition
 	))
 
-	// API routes
-	r.Get("/api/endpoint", CheckBearer(HandleGetEndpoints))
-	r.Post("/api/endpoint", CheckBearer(HandleCreateEndpoint))
+	// Public Routes
+	r.Group(func(r chi.Router) {
+		r.Get("/", ux.RenderLanding)
+		r.Get("/signup", ux.RenderSignup)
+		r.Get("/login", ux.RenderLogin)
+		r.Get("/logout", auth.HandleLogout)
+	})
 
-	http.ListenAndServe(":8000", r)
+	// Private Routes
+	// Require Authentication
+	r.Group(func(r chi.Router) {
+		r.Use(auth.UserSession)
+		r.Get("/manage", ux.RenderManage)
+	})
+
+	// Admin Routes
+	//r.Group(func(r chi.Router) {
+	//	r.Use(AuthAdmin)
+	//	r.Post("/admin", CreateAsset)
+	//})
+
+	// API routes
+	r.Group(func(r chi.Router) {
+		r.Get("/api/endpoint", CheckBearer(HandleGetEndpoints))
+		r.Post("/api/endpoint", CheckBearer(HandleCreateEndpoint))
+	})
+
+	log.Fatalln(http.ListenAndServe(":8000", r))
 }
 
 type Datacenter struct {
