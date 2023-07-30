@@ -1,9 +1,22 @@
 package ux
 
-import "net/http"
+import (
+	"html/template"
+	"net/http"
+)
 
 func RenderLanding(w http.ResponseWriter, r *http.Request) {
-	return
+	// Parse the templates
+	tmpl, err := template.ParseFiles("templates/base.html", "templates/landing.html")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Execute the "layout" template and send it to the ResponseWriter.
+	if err := tmpl.Execute(w, nil); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
 func RenderSignup(w http.ResponseWriter, r *http.Request) {
 	return

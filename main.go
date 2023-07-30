@@ -4,6 +4,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"log"
 	"net/http"
+	"strings"
 	"yvpn_server/auth"
 	"yvpn_server/db"
 	"yvpn_server/ux"
@@ -15,6 +16,9 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+
+	// Serve static files from the "static" directory
+	fileServer(r, "/static", http.Dir("./static"))
 
 	// Public Routes
 	r.Group(func(r chi.Router) {
@@ -32,4 +36,22 @@ func main() {
 	})
 
 	log.Fatalln(http.ListenAndServe(":8000", r))
+}
+
+func fileServer(r *chi.Mux, path string, root http.FileSystem) {
+	if strings.ContainsAny(path, "{}*") {
+		panic("fileServer does not permit any URL parameters.")
+	}
+
+	fs := http.StripPrefix(path, http.FileServer(root))
+
+	if path != "/" && path[len(path)-1] != '/' {
+		r.Get(path, http.RedirectHandler(path+"/", 301).ServeHTTP)
+		path += "/"
+	}
+	path += "*"
+
+	r.Get(path, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fs.ServeHTTP(w, r)
+	}))
 }
