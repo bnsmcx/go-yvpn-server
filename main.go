@@ -40,7 +40,7 @@ func main() {
 	// Require Authentication
 	r.Group(func(r chi.Router) {
 		r.Use(auth.UserSession)
-		r.Get("/manage", ux.RenderManage)
+		r.Get("/dashboard", ux.RenderDashboard)
 	})
 
 	log.Fatalln(http.ListenAndServe(":8000", r))
