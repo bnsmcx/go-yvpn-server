@@ -8,16 +8,15 @@ import (
 // UserSession validates a user's session token and permissions
 func UserSession(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// create new context from `r` request context, and assign key `"user"`
-		// to value of `"123"`
-		ctx := context.WithValue(r.Context(), "user", "123")
-
-		// call the next handler in the chain, passing the response writer and
-		// the updated request object with the new context value.
-		//
-		// note: context.Context values are nested, so any previously set
-		// values will be accessible as well, and the new `"user"` key
-		// will be accessible from this point forward.
+		cookie, err := r.Cookie("session_id")
+		if err != nil {
+			http.Error(w, "missing session_id", http.StatusUnauthorized)
+		}
+		id, ok := getSession(cookie.Value)
+		if !ok {
+			http.Error(w, "invalid session_id", http.StatusUnauthorized)
+		}
+		ctx := context.WithValue(r.Context(), "id", id)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
