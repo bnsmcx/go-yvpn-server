@@ -2,28 +2,11 @@ package db
 
 import (
 	"fmt"
-	"github.com/google/uuid"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
 var database *gorm.DB
-
-// Endpoint defines the Endpoint record
-type Endpoint struct {
-	ID         int `gorm:"primaryKey"`
-	Datacenter string
-	AccountID  uuid.UUID
-	IP         string
-}
-
-func (e *Endpoint) Save() error {
-	result := database.Create(e)
-	if result.Error != nil {
-		return fmt.Errorf("creating endpoint db record: %s", result.Error)
-	}
-	return nil
-}
 
 // Connect contains the startup and connection logic for the database
 func Connect() error {
@@ -40,6 +23,15 @@ func Connect() error {
 		return fmt.Errorf("schema automigration: %s", err)
 	}
 	return nil
+}
+
+func GetAccountByEmail(email string) (*Account, error) {
+	var account = Account{Email: email}
+	result := database.First(&account)
+	if result.Error != nil {
+		return nil, fmt.Errorf("record not found: %s", result.Error)
+	}
+	return &account, nil
 }
 
 func GetAccountByBearer(bearer string) (*Account, error) {
