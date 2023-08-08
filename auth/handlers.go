@@ -8,6 +8,8 @@ import (
 )
 
 func HandleLogout(w http.ResponseWriter, r *http.Request) {
+	deleteSession(r.Context().Value("session_id").(string))
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 	return
 }
 
@@ -53,6 +55,5 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 	http.SetCookie(w, cookie)
 
-	// Redirect to a protected page or return a success response
 	http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
 }

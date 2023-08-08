@@ -17,6 +17,7 @@ func UserSession(next http.Handler) http.Handler {
 			http.Error(w, "invalid session_id", http.StatusUnauthorized)
 		}
 		ctx := context.WithValue(r.Context(), "id", id)
+		ctx = context.WithValue(ctx, "session_id", cookie.Value)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

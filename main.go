@@ -31,7 +31,6 @@ func main() {
 		r.Get("/", ux.RenderLanding)
 		r.Get("/signup", ux.RenderSignup)
 		r.Get("/login", ux.RenderLogin)
-		r.Get("/logout", auth.HandleLogout)
 		r.Post("/signup", ux.SignupHandler)
 		r.Post("/login", auth.Login)
 	})
@@ -41,6 +40,7 @@ func main() {
 	r.Group(func(r chi.Router) {
 		r.Use(auth.UserSession)
 		r.Get("/dashboard", ux.RenderDashboard)
+		r.Get("/logout", auth.HandleLogout)
 	})
 
 	log.Fatalln(http.ListenAndServe(":8000", r))
