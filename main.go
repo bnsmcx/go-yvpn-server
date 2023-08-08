@@ -3,9 +3,11 @@ package main
 import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/httprate"
 	"log"
 	"net/http"
 	"strings"
+	"time"
 	"yvpn_server/auth"
 	"yvpn_server/db"
 	"yvpn_server/ux"
@@ -22,9 +24,13 @@ func main() {
 
 	// Add middleware
 	r.Use(middleware.DefaultLogger)
+	r.Use(httprate.LimitByIP(60, 1*time.Minute))
 
 	// Serve static files from the "static" directory
 	fileServer(r, "/static", http.Dir("./static"))
+
+	// Redirect all 404's to home page
+	r.NotFound(ux.RenderLanding)
 
 	// Public Routes
 	r.Group(func(r chi.Router) {
