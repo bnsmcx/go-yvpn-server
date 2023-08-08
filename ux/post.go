@@ -28,5 +28,5 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println("Creating new account: " + err.Error())
 	}
 
-	log.Println("Created new account: <TODO>")
+	log.Printf("Created new account: %s", account.ID.String())
 }
