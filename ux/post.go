@@ -16,14 +16,14 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	newUser := auth.NewUser{
+	newAccount := auth.NewAccount{
 		Email:       r.PostFormValue("email"),
 		Password:    r.PostFormValue("password"),
 		ConfirmPass: r.PostFormValue("confirm-password"),
 		InviteCode:  r.PostFormValue("invite-code"),
 	}
 
-	account, err := auth.CreateAccount(newUser)
+	account, err := newAccount.Create()
 	if err != nil {
 		log.Println("Creating new account: " + err.Error())
 	}
