@@ -33,6 +33,7 @@ func main() {
 		r.Get("/login", ux.RenderLogin)
 		r.Get("/logout", auth.HandleLogout)
 		r.Post("/signup", ux.SignupHandler)
+		r.Post("/login", auth.Login)
 	})
 
 	// Private Routes
