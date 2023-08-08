@@ -37,12 +37,3 @@ func GetAccountByEmail(email string) (*Account, error) {
 	}
 	return &account, nil
 }
-
-func GetAccountByBearer(bearer string) (*Account, error) {
-	var account = Account{BearerToken: bearer}
-	result := database.First(&account)
-	if result.Error != nil {
-		return nil, fmt.Errorf("record not found: %s", result.Error)
-	}
-	return &account, nil
-}
