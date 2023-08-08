@@ -1,6 +1,7 @@
 package db
 
 import (
+	"errors"
 	"fmt"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -26,10 +27,13 @@ func Connect() error {
 }
 
 func GetAccountByEmail(email string) (*Account, error) {
-	var account = Account{Email: email}
-	result := database.First(&account)
+	var account Account
+	result := database.Where("email = ?", email).First(&account)
 	if result.Error != nil {
-		return nil, fmt.Errorf("record not found: %s", result.Error)
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			return nil, fmt.Errorf("record not found: %s", result.Error)
+		}
+		return nil, result.Error
 	}
 	return &account, nil
 }

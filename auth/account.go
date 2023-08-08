@@ -20,7 +20,7 @@ func CreateAccount(u NewUser) (*db.Account, error) {
 
 	// Hash the password
 	hashedPass, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
-	if err == nil {
+	if err != nil {
 		return &db.Account{}, err
 	}
 
