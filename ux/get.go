@@ -33,7 +33,17 @@ func RenderSignup(w http.ResponseWriter, r *http.Request) {
 }
 
 func RenderLogin(w http.ResponseWriter, r *http.Request) {
-	return
+	// Parse the templates
+	tmpl, err := template.ParseFiles("templates/base.html", "templates/login.html")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Execute the "layout" template and send it to the ResponseWriter.
+	if err := tmpl.Execute(w, nil); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
 
 func RenderManage(w http.ResponseWriter, r *http.Request) {
