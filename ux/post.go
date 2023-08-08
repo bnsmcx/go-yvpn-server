@@ -25,7 +25,7 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 
 	account, err := auth.CreateAccount(newUser)
 	if err != nil {
-		log.Println("Creating new account: " + err)
+		log.Println("Creating new account: " + err.Error())
 	}
 
 	log.Println("Created new account: <TODO>")

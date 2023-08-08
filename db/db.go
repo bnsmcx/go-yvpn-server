@@ -9,14 +9,6 @@ import (
 
 var database *gorm.DB
 
-// Account defines the Account record
-type Account struct {
-	ID                uuid.UUID `gorm:"type:uuid;primaryKey;"`
-	BearerToken       string
-	DigitalOceanToken string
-	Endpoints         []Endpoint `gorm:"foreignKey:AccountID"`
-}
-
 // Endpoint defines the Endpoint record
 type Endpoint struct {
 	ID         int `gorm:"primaryKey"`
