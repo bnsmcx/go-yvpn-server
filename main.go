@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 	"log"
 	"net/http"
 	"strings"
@@ -11,11 +12,16 @@ import (
 )
 
 func main() {
-	r := chi.NewRouter()
 	err := db.Connect()
 	if err != nil {
 		log.Fatalln(err)
 	}
+
+	// Create the router
+	r := chi.NewRouter()
+
+	// Add middleware
+	r.Use(middleware.DefaultLogger)
 
 	// Serve static files from the "static" directory
 	fileServer(r, "/static", http.Dir("./static"))
@@ -26,6 +32,7 @@ func main() {
 		r.Get("/signup", ux.RenderSignup)
 		r.Get("/login", ux.RenderLogin)
 		r.Get("/logout", auth.HandleLogout)
+		r.Post("/signup", ux.SignupHandler)
 	})
 
 	// Private Routes
