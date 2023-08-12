@@ -3,6 +3,7 @@ package db
 import (
 	"errors"
 	"fmt"
+	"github.com/google/uuid"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -34,6 +35,15 @@ func GetAccountByEmail(email string) (*Account, error) {
 			return nil, fmt.Errorf("record not found: %s", result.Error)
 		}
 		return nil, result.Error
+	}
+	return &account, nil
+}
+
+func GetAccount(id uuid.UUID) (*Account, error) {
+	var account Account
+	result := database.Preload("Endpoints").Where("id = ?", id).First(&account)
+	if result.Error != nil {
+		return nil, fmt.Errorf("record not found: %s", result.Error)
 	}
 	return &account, nil
 }

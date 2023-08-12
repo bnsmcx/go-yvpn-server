@@ -1,4 +1,22 @@
 {{define "content"}}
-dashboard
+<h2>Dashboard</h2>
 <a href="/logout">Logout</a>
+<div id="settings">
+    <h3>Settings</h3>
+    <div><b>{{.Email}}</b> <a href="/logout">Logout</a></div>
+    <div>
+        <b>Digital Ocean Token: </b>
+        {{if .DigitalOceanToken}}{{.DigitalOceanToken}}{{else}}<em>None</em>{{end}}
+        <a href="/token/add">Edit</a>
+    </div>
+</div>
+<div id="endpoints">
+    <h3>Endpoints</h3>
+    {{range .Endpoints}}
+    <details>
+        <summary>{{.ID}} | {{.Datacenter}} | {{.IP}}</summary>
+        TODO: Add clients
+    </details>
+    {{end}}
+</div>
 {{end}}
