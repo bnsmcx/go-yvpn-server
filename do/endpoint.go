@@ -2,8 +2,11 @@ package do
 
 import (
 	"context"
+	"fmt"
 	"github.com/digitalocean/godo"
 	"github.com/google/uuid"
+	"log"
+	"time"
 	"yvpn_server/db"
 )
 
@@ -30,15 +33,13 @@ func (e *NewEndpoint) Create() error {
 		return err
 	}
 
-	dropletIP, err := droplet.PublicIPv4()
-	if err != nil {
-		return err
-	}
+	fmt.Println("> ", &e.Token, &droplet)
+	go awaitIP(e.Token, droplet.ID)
 
 	endpoint := db.Endpoint{
 		ID:         droplet.ID,
 		Datacenter: droplet.Region.Slug,
-		IP:         dropletIP,
+		AccountID:  e.AccountID,
 	}
 
 	err = endpoint.Save()
@@ -46,4 +47,29 @@ func (e *NewEndpoint) Create() error {
 		return err
 	}
 	return nil
+}
+
+func awaitIP(token string, id int) {
+	for i := 0; i < 36; i++ {
+		time.Sleep(10 * time.Second)
+		client := godo.NewFromToken(token)
+		droplet, _, err := client.Droplets.Get(context.TODO(), id)
+		if err != nil {
+			log.Println(err)
+			return
+		} else if droplet.Status != "active" {
+			continue
+		}
+
+		ip, err := droplet.PublicIPv4()
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		err = db.UpdateEndpointIP(id, ip)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+	}
 }

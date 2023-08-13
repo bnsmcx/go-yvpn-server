@@ -47,3 +47,22 @@ func GetAccount(id uuid.UUID) (*Account, error) {
 	}
 	return &account, nil
 }
+
+func GetEndpoint(id int) (*Endpoint, error) {
+	var endpoint Endpoint
+	result := database.Where("id = ?", id).First(&endpoint)
+	if result.Error != nil {
+		return nil, fmt.Errorf("record not found: %s", result.Error)
+	}
+	return &endpoint, nil
+}
+
+func UpdateEndpointIP(id int, ip string) error {
+	e, err := GetEndpoint(id)
+	if err != nil {
+		return err
+	}
+
+	e.IP = ip
+	return e.Save()
+}

@@ -14,7 +14,7 @@ type Endpoint struct {
 }
 
 func (e *Endpoint) Save() error {
-	result := database.Create(e)
+	result := database.Save(e)
 	if result.Error != nil {
 		return fmt.Errorf("creating endpoint db record: %s", result.Error)
 	}
