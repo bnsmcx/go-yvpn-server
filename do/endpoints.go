@@ -3,7 +3,6 @@ package do
 import (
 	"context"
 	"github.com/digitalocean/godo"
-	"os"
 	"yvpn_server/db"
 )
 
@@ -11,8 +10,8 @@ type Datacenter struct {
 	Datacenter string `json:"datacenter"`
 }
 
-func (d *Datacenter) CreateEndpoint() error {
-	client := godo.NewFromToken(os.Getenv("DIGITAL_OCEAN_PAT"))
+func (d *Datacenter) CreateEndpoint(token string) error {
+	client := godo.NewFromToken(token)
 	ctx := context.TODO()
 
 	createRequest := &godo.DropletCreateRequest{
