@@ -2,7 +2,6 @@ package do
 
 import (
 	"context"
-	"fmt"
 	"github.com/digitalocean/godo"
 	"github.com/google/uuid"
 	"log"
@@ -33,7 +32,6 @@ func (e *NewEndpoint) Create() error {
 		return err
 	}
 
-	fmt.Println("> ", &e.Token, &droplet)
 	go awaitIP(e.Token, droplet.ID)
 
 	endpoint := db.Endpoint{
