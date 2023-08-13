@@ -1,0 +1,7 @@
+<form hx-post="/endpoints/add" hx-trigger="change">
+    <select name="dropdown">
+        {{range .Datacenters}}
+        <option value="{{.}}">{{.}}</option>
+        {{end}}
+    </select>
+</form>

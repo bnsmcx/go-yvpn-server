@@ -46,9 +46,12 @@ func main() {
 	// Require Authentication
 	r.Group(func(r chi.Router) {
 		r.Use(auth.UserSession)
+
 		r.Get("/dashboard", ux.RenderDashboard)
 		r.Get("/logout", auth.HandleLogout)
 		r.Get("/token/add", ux.RenderAddToken)
+		r.Get("/endpoints/add", ux.RenderAddEndpoint)
+
 		r.Post("/token/add", do.AddToken)
 	})
 

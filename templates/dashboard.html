@@ -12,6 +12,7 @@
 </div>
 <div id="endpoints">
     <h3>Endpoints</h3>
+    <button hx-get="/endpoints/add" hx-target="#endpoints">Add</button>
     {{range .Endpoints}}
     <details>
         <summary>{{.ID}} | {{.Datacenter}} | {{.IP}}</summary>
