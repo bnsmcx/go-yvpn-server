@@ -10,6 +10,7 @@ import (
 	"time"
 	"yvpn_server/auth"
 	"yvpn_server/db"
+	"yvpn_server/do"
 	"yvpn_server/ux"
 )
 
@@ -46,6 +47,7 @@ func main() {
 	r.Group(func(r chi.Router) {
 		r.Use(auth.UserSession)
 		r.Get("/dashboard", ux.RenderDashboard)
+		r.Post("/token/add", do.AddToken)
 		r.Get("/logout", auth.HandleLogout)
 	})
 
