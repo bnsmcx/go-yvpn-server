@@ -47,8 +47,9 @@ func main() {
 	r.Group(func(r chi.Router) {
 		r.Use(auth.UserSession)
 		r.Get("/dashboard", ux.RenderDashboard)
-		r.Post("/token/add", do.AddToken)
 		r.Get("/logout", auth.HandleLogout)
+		r.Get("/token/add", ux.RenderAddToken)
+		r.Post("/token/add", do.AddToken)
 	})
 
 	log.Fatalln(http.ListenAndServe(":8000", r))

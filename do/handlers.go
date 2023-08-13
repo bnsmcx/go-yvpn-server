@@ -18,12 +18,17 @@ func AddToken(w http.ResponseWriter, r *http.Request) {
 	a, err := db.GetAccount(r.Context().Value("id").(uuid.UUID))
 	if err != nil {
 		log.Println(err)
-		http.Error(w, "no a", http.StatusUnauthorized)
+		http.Error(w, "no account", http.StatusUnauthorized)
 		return
 	}
 
 	a.DigitalOceanToken = r.PostFormValue("token")
 	err = a.Save()
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "saving token", http.StatusInternalServerError)
+		return
+	}
 
-	http.Redirect(w, r, "/dash", http.StatusSeeOther)
+	w.Header().Set("HX-Redirect", "/dashboard")
 }

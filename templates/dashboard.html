@@ -7,7 +7,7 @@
     <div>
         <b>Digital Ocean Token: </b>
         {{if .DigitalOceanToken}}{{.DigitalOceanToken}}{{else}}<em>None</em>{{end}}
-        <a href="/token/add">Edit</a>
+        <button hx-get="/token/add" hx-target="#settings">Edit</button>
     </div>
 </div>
 <div id="endpoints">
