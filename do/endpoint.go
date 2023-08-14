@@ -36,7 +36,7 @@ func (e *NewEndpoint) Create() error {
 		PrivKey: priv,
 	}
 
-	var clientKeys map[string]KeyPair
+	var clientKeys = make(map[string]KeyPair)
 
 	for i := 2; i <= 255; i++ {
 		pub, priv, err := wg.GenerateKeys()
