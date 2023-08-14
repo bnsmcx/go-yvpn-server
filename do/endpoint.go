@@ -32,7 +32,7 @@ func (e *NewEndpoint) Create() error {
 
 	var clientKeys = make(map[string]wg.Keys)
 
-	for i := 2; i <= 25; i++ {
+	for i := 2; i <= 5; i++ {
 		pub, priv, err := wg.GenerateKeys()
 		if err != nil {
 			return err
@@ -45,7 +45,8 @@ func (e *NewEndpoint) Create() error {
 	}
 
 	serverConfig, err := wg.GenerateServerConfig(serverKeys, clientKeys)
-	fmt.Println(serverConfig)
+	cloudInit := wg.GenerateCloudInit(serverConfig)
+	fmt.Println(cloudInit)
 
 	createRequest := &godo.DropletCreateRequest{
 		Name:   "yvpn-test",

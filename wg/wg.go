@@ -44,3 +44,27 @@ func GenerateServerConfig(servKeys Keys, clients map[string]Keys) (string, error
 
 	return configBuilder.String(), nil
 }
+
+func GenerateCloudInit(wgConfig string) string {
+	const cloudInitTmpl = `#cloud-config
+packages:
+  - wireguard
+  - iptables-persistent
+
+write_files:
+  - content: |
+      %s
+    path: /etc/wireguard/wg0.conf
+    permissions: '0600'
+
+runcmd:
+  - wg-quick up wg0
+  - systemctl enable wg-quick@wg0.service
+  - iptables -A INPUT -p udp -m udp --dport 51820 -j ACCEPT
+  - iptables -A FORWARD -i wg0 -j ACCEPT
+  - iptables-save > /etc/iptables/rules.v4
+
+`
+
+	return fmt.Sprintf(cloudInitTmpl, wgConfig)
+}
