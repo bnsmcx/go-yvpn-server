@@ -2,11 +2,14 @@ package do
 
 import (
 	"context"
+	"fmt"
 	"github.com/digitalocean/godo"
 	"github.com/google/uuid"
+	"golang.zx2c4.com/wireguard/wgctrl/wgtypes"
 	"log"
 	"time"
 	"yvpn_server/db"
+	"yvpn_server/wg"
 )
 
 type NewEndpoint struct {
@@ -18,6 +21,41 @@ type NewEndpoint struct {
 func (e *NewEndpoint) Create() error {
 	client := godo.NewFromToken(e.Token)
 	ctx := context.TODO()
+
+	type KeyPair struct {
+		PubKey  wgtypes.Key
+		PrivKey wgtypes.Key
+	}
+
+	pub, priv, err := wg.GenerateKeys()
+	if err != nil {
+		return err
+	}
+	serverKeys := KeyPair{
+		PubKey:  pub,
+		PrivKey: priv,
+	}
+
+	var clientKeys map[string]KeyPair
+
+	for i := 2; i <= 255; i++ {
+		pub, priv, err := wg.GenerateKeys()
+		if err != nil {
+			return err
+		}
+		keys := KeyPair{
+			PubKey:  pub,
+			PrivKey: priv,
+		}
+		clientKeys[fmt.Sprintf("10.0.0.%d", i)] = keys
+	}
+
+	fmt.Println(serverKeys)
+	for k, v := range clientKeys {
+		fmt.Println(k)
+		fmt.Println(v)
+	}
+	//serverConfig, err := wg.GenerateServerConfig(serverKeys, clientKeys)
 
 	createRequest := &godo.DropletCreateRequest{
 		Name:   "yvpn-test",

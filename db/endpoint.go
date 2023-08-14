@@ -11,6 +11,13 @@ type Endpoint struct {
 	Datacenter string
 	AccountID  uuid.UUID
 	IP         string
+	PublicKey  string
+	PrivateKey string
+	Clients    []struct {
+		IP         string
+		PublicKey  string
+		PrivateKey string
+	}
 }
 
 func (e *Endpoint) Save() error {
