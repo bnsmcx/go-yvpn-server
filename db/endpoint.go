@@ -13,11 +13,15 @@ type Endpoint struct {
 	IP         string
 	PublicKey  string
 	PrivateKey string
-	Clients    []struct {
-		IP         string
-		PublicKey  string
-		PrivateKey string
-	}
+	Clients    []Client `gorm:"foreignKey:EndpointID"`
+}
+
+type Client struct {
+	ID         string `gorm:"primaryKey"`
+	EndpointID int
+	IP         string
+	PublicKey  string
+	PrivateKey string
 }
 
 func (e *Endpoint) Save() error {
