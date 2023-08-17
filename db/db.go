@@ -6,6 +6,7 @@ import (
 	"github.com/google/uuid"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"yvpn_server/wg"
 )
 
 var database *gorm.DB
@@ -20,7 +21,7 @@ func Connect() error {
 	database = d
 
 	// Migrate the schema
-	err = database.AutoMigrate(&Account{}, &Endpoint{})
+	err = database.AutoMigrate(&Account{}, &Endpoint{}, &Client{})
 	if err != nil {
 		return fmt.Errorf("schema automigration: %s", err)
 	}
@@ -57,12 +58,18 @@ func GetEndpoint(id int) (*Endpoint, error) {
 	return &endpoint, nil
 }
 
-func UpdateEndpointIP(id int, ip string) error {
+func UpdateEndpointIPandClients(id int, ip string, clients map[string]wg.Keys) error {
 	e, err := GetEndpoint(id)
 	if err != nil {
 		return err
 	}
 
 	e.IP = ip
+	for k, v := range clients {
+		err := e.AddClient(k, v.Public, v.Private)
+		if err != nil {
+			return err
+		}
+	}
 	return e.Save()
 }

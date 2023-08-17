@@ -3,6 +3,8 @@ package db
 import (
 	"fmt"
 	"github.com/google/uuid"
+	"golang.zx2c4.com/wireguard/wgctrl/wgtypes"
+	"yvpn_server/wg"
 )
 
 // Endpoint defines the Endpoint record
@@ -19,9 +21,7 @@ type Endpoint struct {
 type Client struct {
 	ID         string `gorm:"primaryKey"`
 	EndpointID int
-	IP         string
-	PublicKey  string
-	PrivateKey string
+	Config     string
 }
 
 func (e *Endpoint) Save() error {
@@ -30,4 +30,19 @@ func (e *Endpoint) Save() error {
 		return fmt.Errorf("creating endpoint db record: %s", result.Error)
 	}
 	return nil
+}
+
+func (e *Endpoint) AddClient(clientIP string, pubKey, privKey wgtypes.Key) error {
+	config, err := wg.GenerateClientConfig(e.IP, clientIP, pubKey, privKey)
+	if err != nil {
+		return err
+	}
+
+	e.Clients = append(e.Clients, Client{
+		ID:         "",
+		EndpointID: e.ID,
+		Config:     config,
+	})
+
+	return e.Save()
 }

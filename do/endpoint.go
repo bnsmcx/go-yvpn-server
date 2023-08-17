@@ -32,7 +32,7 @@ func (e *NewEndpoint) Create() error {
 
 	var clientKeys = make(map[string]wg.Keys)
 
-	for i := 2; i <= 5; i++ {
+	for i := 2; i <= 255; i++ {
 		pub, priv, err := wg.GenerateKeys()
 		if err != nil {
 			return err
@@ -68,7 +68,7 @@ func (e *NewEndpoint) Create() error {
 		return err
 	}
 
-	go awaitIP(e.Token, droplet.ID)
+	go awaitIPandUpdateEndpoint(e.Token, droplet.ID, clientKeys)
 
 	endpoint := db.Endpoint{
 		ID:         droplet.ID,
@@ -80,13 +80,14 @@ func (e *NewEndpoint) Create() error {
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
 
-func awaitIP(token string, id int) {
-	for i := 0; i < 36; i++ {
-		time.Sleep(10 * time.Second)
-		client := godo.NewFromToken(token)
+func awaitIPandUpdateEndpoint(token string, id int, clients map[string]wg.Keys) {
+	client := godo.NewFromToken(token)
+	for i := 0; i < 360; i++ {
+		time.Sleep(time.Second)
 		droplet, _, err := client.Droplets.Get(context.TODO(), id)
 		if err != nil {
 			log.Println(err)
@@ -100,7 +101,7 @@ func awaitIP(token string, id int) {
 			log.Println(err)
 			return
 		}
-		err = db.UpdateEndpointIP(id, ip)
+		err = db.UpdateEndpointIPandClients(id, ip, clients)
 		if err != nil {
 			log.Println(err)
 			return
