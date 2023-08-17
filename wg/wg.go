@@ -1,9 +1,11 @@
 package wg
 
 import (
+	"bytes"
 	"fmt"
 	"golang.zx2c4.com/wireguard/wgctrl/wgtypes"
 	"strings"
+	"text/template"
 )
 
 type Keys struct {
@@ -45,26 +47,48 @@ func GenerateServerConfig(servKeys Keys, clients map[string]Keys) (string, error
 	return configBuilder.String(), nil
 }
 
-func GenerateCloudInit(wgConfig string) string {
+func GenerateCloudInit(wgConfig string) (string, error) {
 	const cloudInitTmpl = `#cloud-config
+
 packages:
-  - wireguard
   - iptables-persistent
 
 write_files:
   - content: |
-      %s
+{{ indent 6 .ConfigContent }}
     path: /etc/wireguard/wg0.conf
     permissions: '0600'
 
 runcmd:
+  - add-apt-repository -y ppa:wireguard/wireguard
+  - apt update
+  - apt install -y wireguard-tools
+  - apt install resolvconf
   - wg-quick up wg0
   - systemctl enable wg-quick@wg0.service
   - iptables -A INPUT -p udp -m udp --dport 51820 -j ACCEPT
   - iptables -A FORWARD -i wg0 -j ACCEPT
-  - iptables-save > /etc/iptables/rules.v4
+  - iptables-save > /etc/iptables/rules.v4`
 
-`
+	data := map[string]string{
+		"ConfigContent": wgConfig,
+	}
 
-	return fmt.Sprintf(cloudInitTmpl, wgConfig)
+	tmpl, err := template.New("cloud-init").Funcs(template.FuncMap{
+		"indent": func(i int, input string) string {
+			prefix := strings.Repeat(" ", i)
+			return prefix + strings.ReplaceAll(input, "\n", "\n"+prefix)
+		},
+	}).Parse(cloudInitTmpl)
+
+	if err != nil {
+		return "", err
+	}
+
+	var buf bytes.Buffer
+	if err = tmpl.Execute(&buf, data); err != nil {
+		return "", err
+	}
+
+	return buf.String(), nil
 }

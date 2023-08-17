@@ -45,15 +45,22 @@ func (e *NewEndpoint) Create() error {
 	}
 
 	serverConfig, err := wg.GenerateServerConfig(serverKeys, clientKeys)
-	cloudInit := wg.GenerateCloudInit(serverConfig)
-	fmt.Println(cloudInit)
+	if err != nil {
+		return err
+	}
+
+	cloudInit, err := wg.GenerateCloudInit(serverConfig)
+	if err != nil {
+		return err
+	}
 
 	createRequest := &godo.DropletCreateRequest{
-		Name:   "yvpn-test",
-		Region: e.Datacenter,
-		Size:   "s-1vcpu-1gb",
+		Name:     "yvpn-" + e.Datacenter,
+		Region:   e.Datacenter,
+		Size:     "s-1vcpu-1gb",
+		UserData: cloudInit,
 		Image: godo.DropletCreateImage{
-			ID: 110391971,
+			Slug: "ubuntu-22-04-x64",
 		},
 	}
 	droplet, _, err := client.Droplets.Create(ctx, createRequest)
