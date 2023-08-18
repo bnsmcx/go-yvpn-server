@@ -25,17 +25,35 @@ func GenerateKeys() (wgtypes.Key, wgtypes.Key, error) {
 	return privateKey, publicKey, nil
 }
 
+func GenerateClientConfig(
+	serverIP, clientIP string,
+	serverPubKey, clientPrivKey string) (string, error) {
+
+	configBuilder := strings.Builder{}
+
+	configBuilder.WriteString("[Interface]\n")
+	configBuilder.WriteString(fmt.Sprintf("Address = %s/24\n", clientIP))
+	configBuilder.WriteString(fmt.Sprintf("PrivateKey = %s\n\n", clientPrivKey))
+
+	configBuilder.WriteString("[Peer]\n")
+	configBuilder.WriteString(fmt.Sprintf("PublicKey = %s\n", serverPubKey))
+	configBuilder.WriteString(fmt.Sprintf("Endpoint = %s:51820\n", serverIP))
+	configBuilder.WriteString("AllowedIPs = 0.0.0.0/0\n")
+
+	return configBuilder.String(), nil
+}
+
 func GenerateServerConfig(servKeys Keys, clients map[string]Keys) (string, error) {
 	// Begin with the server's [Interface] configuration
 	configBuilder := strings.Builder{}
 
 	configBuilder.WriteString("[Interface]\n")
 	configBuilder.WriteString(fmt.Sprintf("Address = 10.0.0.1/24\n"))
+	configBuilder.WriteString(fmt.Sprintf("SaveConfig = true\n"))
 	configBuilder.WriteString(fmt.Sprintf("ListenPort = 51820\n"))
 	configBuilder.WriteString(fmt.Sprintf("PrivateKey = %s\n", servKeys.Private))
-	configBuilder.WriteString("PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE\n")
-	configBuilder.WriteString("PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE\n")
-	configBuilder.WriteString("DNS = 10.0.0.1\n\n")
+	configBuilder.WriteString("PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE\n")
+	configBuilder.WriteString("PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE\n")
 
 	// For each client, append a [Peer] configuration
 	for allowedIP, keys := range clients {
@@ -46,7 +64,6 @@ func GenerateServerConfig(servKeys Keys, clients map[string]Keys) (string, error
 
 	return configBuilder.String(), nil
 }
-
 func GenerateCloudInit(wgConfig string) (string, error) {
 	const cloudInitTmpl = `#cloud-config
 
@@ -63,12 +80,11 @@ runcmd:
   - add-apt-repository -y ppa:wireguard/wireguard
   - apt update
   - apt install -y wireguard-tools
-  - apt install resolvconf
+  - apt install -y resolvconf
+  - sysctl -p
   - wg-quick up wg0
   - systemctl enable wg-quick@wg0.service
-  - iptables -A INPUT -p udp -m udp --dport 51820 -j ACCEPT
-  - iptables -A FORWARD -i wg0 -j ACCEPT
-  - iptables-save > /etc/iptables/rules.v4`
+`
 
 	data := map[string]string{
 		"ConfigContent": wgConfig,

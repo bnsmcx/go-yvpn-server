@@ -66,7 +66,7 @@ func UpdateEndpointIPandClients(id int, ip string, clients map[string]wg.Keys) e
 
 	e.IP = ip
 	for k, v := range clients {
-		err := e.AddClient(k, v.Public, v.Private)
+		err := e.AddClient(k, v.Private)
 		if err != nil {
 			return err
 		}

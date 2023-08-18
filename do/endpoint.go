@@ -21,7 +21,7 @@ func (e *NewEndpoint) Create() error {
 	client := godo.NewFromToken(e.Token)
 	ctx := context.TODO()
 
-	pub, priv, err := wg.GenerateKeys()
+	priv, pub, err := wg.GenerateKeys()
 	if err != nil {
 		return err
 	}
@@ -33,7 +33,7 @@ func (e *NewEndpoint) Create() error {
 	var clientKeys = make(map[string]wg.Keys)
 
 	for i := 2; i <= 255; i++ {
-		pub, priv, err := wg.GenerateKeys()
+		priv, pub, err := wg.GenerateKeys()
 		if err != nil {
 			return err
 		}
@@ -74,6 +74,8 @@ func (e *NewEndpoint) Create() error {
 		ID:         droplet.ID,
 		Datacenter: droplet.Region.Slug,
 		AccountID:  e.AccountID,
+		PublicKey:  serverKeys.Public.String(),
+		PrivateKey: serverKeys.Private.String(),
 	}
 
 	err = endpoint.Save()
@@ -106,5 +108,6 @@ func awaitIPandUpdateEndpoint(token string, id int, clients map[string]wg.Keys) 
 			log.Println(err)
 			return
 		}
+		return
 	}
 }

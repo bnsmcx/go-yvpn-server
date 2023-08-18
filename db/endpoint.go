@@ -32,8 +32,8 @@ func (e *Endpoint) Save() error {
 	return nil
 }
 
-func (e *Endpoint) AddClient(clientIP string, pubKey, privKey wgtypes.Key) error {
-	config, err := wg.GenerateClientConfig(e.IP, clientIP, pubKey, privKey)
+func (e *Endpoint) AddClient(clientIP string, privKey wgtypes.Key) error {
+	config, err := wg.GenerateClientConfig(e.IP, clientIP, e.PublicKey, privKey.String())
 	if err != nil {
 		return err
 	}
