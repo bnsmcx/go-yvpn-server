@@ -33,6 +33,7 @@ func GenerateClientConfig(
 
 	configBuilder.WriteString("[Interface]\n")
 	configBuilder.WriteString(fmt.Sprintf("Address = %s/24\n", clientIP))
+	configBuilder.WriteString("DNS = 10.0.0.1\n")
 	configBuilder.WriteString(fmt.Sprintf("PrivateKey = %s\n\n", clientPrivKey))
 
 	configBuilder.WriteString("[Peer]\n")
@@ -49,11 +50,10 @@ func GenerateServerConfig(servKeys Keys, clients map[string]Keys) (string, error
 
 	configBuilder.WriteString("[Interface]\n")
 	configBuilder.WriteString(fmt.Sprintf("Address = 10.0.0.1/24\n"))
-	configBuilder.WriteString(fmt.Sprintf("SaveConfig = true\n"))
 	configBuilder.WriteString(fmt.Sprintf("ListenPort = 51820\n"))
 	configBuilder.WriteString(fmt.Sprintf("PrivateKey = %s\n", servKeys.Private))
 	configBuilder.WriteString("PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE\n")
-	configBuilder.WriteString("PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE\n")
+	configBuilder.WriteString("PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE\n\n")
 
 	// For each client, append a [Peer] configuration
 	for allowedIP, keys := range clients {
