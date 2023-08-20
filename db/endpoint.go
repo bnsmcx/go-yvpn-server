@@ -22,6 +22,7 @@ type Client struct {
 	ID         uuid.UUID `gorm:"primaryKey"`
 	EndpointID int
 	Config     string
+	QR         []byte
 }
 
 func (e *Endpoint) Save() error {
@@ -38,7 +39,7 @@ func (e *Endpoint) AddClient(clientIP string, privKey wgtypes.Key) error {
 		return err
 	}
 
-	err = wg.GenerateQR(config)
+	qr, err := wg.GenerateQR(config)
 	if err != nil {
 		return err
 	}
@@ -47,6 +48,7 @@ func (e *Endpoint) AddClient(clientIP string, privKey wgtypes.Key) error {
 		ID:         uuid.New(),
 		EndpointID: e.ID,
 		Config:     config,
+		QR:         qr,
 	})
 
 	return e.Save()

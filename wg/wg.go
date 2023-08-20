@@ -117,18 +117,12 @@ runcmd:
 	return buf.String(), nil
 }
 
-func GenerateQR(config string) error {
+func GenerateQR(config string) ([]byte, error) {
 	// Generate QR code
-	qrCode, err := qrcode.New(string(config), qrcode.Medium)
+	qrCode, err := qrcode.New(config, qrcode.Medium)
 	if err != nil {
-		log.Fatalf("Failed to create QR Code: %v", err)
+		return nil, err
 	}
 
-	// Save the QR code as a PNG file
-	err = qrCode.WriteFile(256, fmt.Sprintf("%s.png", "qr"))
-	if err != nil {
-		log.Fatalf("Failed to write the QR Code to file: %v", err)
-	}
-
-	return nil
+	return qrCode.PNG(300)
 }
