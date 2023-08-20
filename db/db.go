@@ -51,7 +51,7 @@ func GetAccount(id uuid.UUID) (*Account, error) {
 
 func GetEndpoint(id int) (*Endpoint, error) {
 	var endpoint Endpoint
-	result := database.Where("id = ?", id).First(&endpoint)
+	result := database.Preload("Clients").Where("id = ?", id).First(&endpoint)
 	if result.Error != nil {
 		return nil, fmt.Errorf("record not found: %s", result.Error)
 	}
@@ -59,17 +59,17 @@ func GetEndpoint(id int) (*Endpoint, error) {
 }
 
 func UpdateEndpointIPandClients(id int, ip string, clients map[string]wg.Keys) error {
-	e, err := GetEndpoint(id)
-	if err != nil {
-		return err
-	}
-
-	e.IP = ip
 	for k, v := range clients {
-		err := e.AddClient(k, v.Private)
+		e, err := GetEndpoint(id) // make sure we get an updated obj after each loop's write
+		if err != nil {
+			return err
+		}
+
+		e.IP = ip
+		err = e.AddClient(k, v.Private)
 		if err != nil {
 			return err
 		}
 	}
-	return e.Save()
+	return nil
 }

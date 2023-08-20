@@ -69,7 +69,6 @@ func GenerateServerConfig(servKeys Keys, clients map[string]Keys) (string, error
 		configBuilder.WriteString(fmt.Sprintf("AllowedIPs = %s\n\n", allowedIP))
 	}
 
-	fmt.Println(configBuilder.String())
 	return configBuilder.String(), nil
 }
 func GenerateCloudInit(wgConfig string) (string, error) {

@@ -19,7 +19,7 @@ type Endpoint struct {
 }
 
 type Client struct {
-	ID         string `gorm:"primaryKey"`
+	ID         uuid.UUID `gorm:"primaryKey"`
 	EndpointID int
 	Config     string
 }
@@ -39,7 +39,7 @@ func (e *Endpoint) AddClient(clientIP string, privKey wgtypes.Key) error {
 	}
 
 	e.Clients = append(e.Clients, Client{
-		ID:         "",
+		ID:         uuid.New(),
 		EndpointID: e.ID,
 		Config:     config,
 	})
