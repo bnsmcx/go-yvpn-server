@@ -35,7 +35,7 @@ func GenerateClientConfig(
 
 	configBuilder.WriteString("[Interface]\n")
 	configBuilder.WriteString(fmt.Sprintf("Address = %s/24\n", clientIP))
-	configBuilder.WriteString("DNS = 10.0.0.1\n")
+	configBuilder.WriteString("DNS = 1.1.1.1\n")
 	configBuilder.WriteString(fmt.Sprintf("PrivateKey = %s\n\n", clientPrivKey))
 
 	configBuilder.WriteString("[Peer]\n")
