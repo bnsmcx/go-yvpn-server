@@ -81,7 +81,7 @@ runcmd:
   - apt update
   - apt install -y wireguard-tools
   - apt install -y resolvconf
-  - sysctl -p
+  - sysctl -w net.ipv4.ip_forward=1
   - wg-quick up wg0
   - systemctl enable wg-quick@wg0.service
 `
