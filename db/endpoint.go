@@ -22,7 +22,7 @@ type Client struct {
 	ID         uuid.UUID `gorm:"primaryKey"`
 	EndpointID int
 	Config     string
-	QR         []byte
+	QR         string
 }
 
 func (e *Endpoint) Save() error {

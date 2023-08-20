@@ -16,7 +16,13 @@
     {{range .Endpoints}}
     <details>
         <summary>{{.ID}} | {{.Datacenter}} | {{.IP}}</summary>
-        TODO: Add clients
+        {{range .Clients}}
+        <details>
+            <summary>{{.ID}}</summary>
+            <pre>{{.Config}}</pre>
+            <img src="data:image/png;base64,{{.QR}}" alt="QR Code">
+        </details>
+        {{end}}
     </details>
     {{end}}
 </div>

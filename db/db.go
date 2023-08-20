@@ -42,7 +42,7 @@ func GetAccountByEmail(email string) (*Account, error) {
 
 func GetAccount(id uuid.UUID) (*Account, error) {
 	var account Account
-	result := database.Preload("Endpoints").Where("id = ?", id).First(&account)
+	result := database.Preload("Endpoints.Clients").Where("id = ?", id).First(&account)
 	if result.Error != nil {
 		return nil, fmt.Errorf("record not found: %s", result.Error)
 	}

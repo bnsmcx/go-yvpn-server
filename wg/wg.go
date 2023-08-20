@@ -2,6 +2,7 @@ package wg
 
 import (
 	"bytes"
+	"encoding/base64"
 	"fmt"
 	"github.com/skip2/go-qrcode"
 	"golang.zx2c4.com/wireguard/wgctrl/wgtypes"
@@ -117,12 +118,17 @@ runcmd:
 	return buf.String(), nil
 }
 
-func GenerateQR(config string) ([]byte, error) {
+func GenerateQR(config string) (string, error) {
 	// Generate QR code
 	qrCode, err := qrcode.New(config, qrcode.Medium)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
-	return qrCode.PNG(300)
+	qr, err := qrCode.PNG(300)
+	if err != nil {
+		return "", err
+	}
+
+	return base64.StdEncoding.EncodeToString(qr), nil
 }
