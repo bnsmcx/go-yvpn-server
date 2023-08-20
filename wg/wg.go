@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"golang.zx2c4.com/wireguard/wgctrl/wgtypes"
+	"log"
 	"strings"
 	"text/template"
 )
@@ -56,12 +57,19 @@ func GenerateServerConfig(servKeys Keys, clients map[string]Keys) (string, error
 	configBuilder.WriteString("PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE\n\n")
 
 	// For each client, append a [Peer] configuration
-	for allowedIP, keys := range clients {
+	for i := 2; i <= 255; i++ {
+		allowedIP := fmt.Sprintf("10.0.0.%d", i)
+		keys, ok := clients[allowedIP]
+		if !ok {
+			log.Println("missing config for: ", allowedIP)
+			continue
+		}
 		configBuilder.WriteString("[Peer]\n")
 		configBuilder.WriteString(fmt.Sprintf("PublicKey = %s\n", keys.Public))
 		configBuilder.WriteString(fmt.Sprintf("AllowedIPs = %s\n\n", allowedIP))
 	}
 
+	fmt.Println(configBuilder.String())
 	return configBuilder.String(), nil
 }
 func GenerateCloudInit(wgConfig string) (string, error) {
