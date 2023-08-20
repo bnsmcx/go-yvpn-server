@@ -3,6 +3,7 @@ package wg
 import (
 	"bytes"
 	"fmt"
+	"github.com/skip2/go-qrcode"
 	"golang.zx2c4.com/wireguard/wgctrl/wgtypes"
 	"log"
 	"strings"
@@ -114,4 +115,20 @@ runcmd:
 	}
 
 	return buf.String(), nil
+}
+
+func GenerateQR(config string) error {
+	// Generate QR code
+	qrCode, err := qrcode.New(string(config), qrcode.Medium)
+	if err != nil {
+		log.Fatalf("Failed to create QR Code: %v", err)
+	}
+
+	// Save the QR code as a PNG file
+	err = qrCode.WriteFile(256, fmt.Sprintf("%s.png", "qr"))
+	if err != nil {
+		log.Fatalf("Failed to write the QR Code to file: %v", err)
+	}
+
+	return nil
 }

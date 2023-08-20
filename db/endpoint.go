@@ -38,6 +38,11 @@ func (e *Endpoint) AddClient(clientIP string, privKey wgtypes.Key) error {
 		return err
 	}
 
+	err = wg.GenerateQR(config)
+	if err != nil {
+		return err
+	}
+
 	e.Clients = append(e.Clients, Client{
 		ID:         uuid.New(),
 		EndpointID: e.ID,
