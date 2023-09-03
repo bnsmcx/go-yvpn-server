@@ -16,6 +16,7 @@
     {{range .Endpoints}}
     <details>
         <summary>{{.ID}} | {{.Datacenter}} | {{.IP}}</summary>
+        <button hx-delete="/endpoints/{{.ID}}" hx-target="#endpoints">Delete</button>
         {{range .Clients}}
         <details>
             <summary>{{.ID}}</summary>

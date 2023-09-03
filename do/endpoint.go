@@ -86,6 +86,14 @@ func (e *NewEndpoint) Create() error {
 	return nil
 }
 
+func DeleteEndpoint(id int, token string) error {
+	client := godo.NewFromToken(token)
+	ctx := context.TODO()
+
+	_, err := client.Droplets.Delete(ctx, id)
+	return err
+}
+
 func awaitIPandUpdateEndpoint(token string, id int, clients map[string]wg.Keys) {
 	client := godo.NewFromToken(token)
 	for i := 0; i < 360; i++ {

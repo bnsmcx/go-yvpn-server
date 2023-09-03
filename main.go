@@ -52,6 +52,8 @@ func main() {
 		r.Get("/token/add", ux.RenderAddToken)
 		r.Get("/endpoints/add", ux.RenderAddEndpoint)
 
+		r.Delete("/endpoints/{id}", do.HandleDeleteEndpoint)
+
 		r.Post("/endpoints/add", do.HandleCreateEndpoint)
 		r.Post("/token/add", do.AddToken)
 	})

@@ -53,3 +53,8 @@ func (e *Endpoint) AddClient(clientIP string, privKey wgtypes.Key) error {
 
 	return e.Save()
 }
+
+func (e *Endpoint) Delete() error {
+	result := database.Delete(e)
+	return result.Error
+}
