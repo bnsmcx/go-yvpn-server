@@ -5,26 +5,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>yvpn.io</title>
         <link rel="stylesheet" href="/static/style.css">
-        <script src="https://unpkg.com/htmx.org@1.9.4"></script>
+        <script src="/static/htmx.org@1.9.4"></script>
     </head>
     <body>
         <header>
             <h1>yVPN, <em>Your VPN</em></h1>
+            <nav>
+                <ul>
+                    <li><a href="/logout">Logout</a></li>
+                </ul>
+            </nav>
         </header>
-
-        <nav>
-            <!-- Navigation Bar -->
-        </nav>
 
         <main>
             <div id="content">
                 {{block "content" .}}  {{end}}
             </div>
         </main>
-
-        <footer>
-            <!-- Footer Content -->
-        </footer>
     </body>
 </html>
 

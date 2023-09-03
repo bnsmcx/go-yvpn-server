@@ -1,0 +1,50 @@
+/* Reset some default browser styles */
+body, h1, h2, h3, p, ul {
+    margin: 0;
+    padding: 0;
+}
+
+/* Add a background color to the header and center its content */
+header {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+}
+
+/* Style the navigation menu */
+nav ul {
+    list-style: none;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: white;
+}
+
+/* Center the content pane */
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#content {
+    width: 1000px;
+    text-align: center;
+    box-sizing: border-box;
+    padding: 20px;
+    border: 1px solid #ccc;
+}
+
+/* Responsive design for small screens */
+@media (max-width: 500px) {
+    .content-pane {
+        width: 100%;
+    }
+}
