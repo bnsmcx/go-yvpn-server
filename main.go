@@ -51,6 +51,7 @@ func main() {
 		r.Get("/logout", auth.HandleLogout)
 		r.Get("/token/add", ux.RenderAddToken)
 		r.Get("/endpoints/add", ux.RenderAddEndpoint)
+		r.Get("/endpoints/{endpoint}/{client}", db.GetClientConfigFile)
 
 		r.Delete("/endpoints/{id}", do.HandleDeleteEndpoint)
 

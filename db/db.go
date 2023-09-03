@@ -3,9 +3,12 @@ package db
 import (
 	"errors"
 	"fmt"
+	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"net/http"
+	"strconv"
 	"yvpn_server/wg"
 )
 
@@ -72,4 +75,30 @@ func UpdateEndpointIPandClients(id int, ip string, clients map[string]wg.Keys) e
 		}
 	}
 	return nil
+}
+
+func GetClientConfigFile(w http.ResponseWriter, r *http.Request) {
+	endpointID, err := strconv.Atoi(chi.URLParam(r, "endpoint"))
+	if err != nil {
+		return
+	}
+
+	clientID := uuid.MustParse(chi.URLParam(r, "client"))
+	e, err := GetEndpoint(endpointID)
+	if err != nil {
+		return
+	}
+
+	c, err := e.GetClient(clientID)
+	if err != nil {
+		return
+	}
+
+	w.Header().Set("Content-Type", "text/plain")
+	w.Header().Set("Content-Disposition",
+		fmt.Sprintf("attachment; filename=%s.conf", e.Datacenter))
+	_, err = w.Write([]byte(c.Config))
+	if err != nil {
+		http.Error(w, "Failed to write response", http.StatusInternalServerError)
+	}
 }

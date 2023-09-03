@@ -1,6 +1,7 @@
 package db
 
 import (
+	"errors"
 	"fmt"
 	"github.com/google/uuid"
 	"golang.zx2c4.com/wireguard/wgctrl/wgtypes"
@@ -31,6 +32,15 @@ func (e *Endpoint) Save() error {
 		return fmt.Errorf("creating endpoint db record: %s", result.Error)
 	}
 	return nil
+}
+
+func (e *Endpoint) GetClient(id uuid.UUID) (*Client, error) {
+	for _, c := range e.Clients {
+		if c.ID == id {
+			return &c, nil
+		}
+	}
+	return nil, errors.New("client not found")
 }
 
 func (e *Endpoint) AddClient(clientIP string, privKey wgtypes.Key) error {

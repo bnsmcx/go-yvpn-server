@@ -21,6 +21,7 @@
         <details>
             <summary>{{.ID}}</summary>
             <pre>{{.Config}}</pre>
+            <a href="/endpoints/{{.EndpointID}}/{{.ID}}">Download</a>
             <img src="data:image/png;base64,{{.QR}}" alt="QR Code">
         </details>
         {{end}}
