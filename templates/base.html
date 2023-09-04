@@ -9,17 +9,20 @@
     </head>
     <body>
         <header>
-            <h1>yVPN, <em>Your VPN</em></h1>
-            <nav>
-                <ul>
-                    {{ if .LoggedIn }}
+            <div>
+                <h1>yVPN, <em>Your VPN</em></h1>
+                <nav>
+                    <ul>
+                        {{ if .LoggedIn }}
                         <li><a href="/logout">Logout</a></li>
                         <li><a href="/dashboard">Dashboard</a></li>
-                    {{ else }}
+                        {{ else }}
                         <li><a href="/login">Login</a></li>
-                    {{ end }}
-                </ul>
-            </nav>
+                        <li><a href="/signup">Signup</a></li>
+                        {{ end }}
+                    </ul>
+                </nav>
+            </div>
         </header>
 
         <main>
