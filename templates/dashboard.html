@@ -2,26 +2,26 @@
 <h2>Dashboard</h2>
 <div id="settings">
     <h3>Settings</h3>
-    <div><b>{{.Email}}</b> <a href="/logout">Logout</a></div>
+    <div><b>{{.Account.Email}}</b> <a href="/logout">Logout</a></div>
     <div>
         <b>Digital Ocean Token: </b>
-        {{if .DigitalOceanToken}}{{.DigitalOceanToken}}{{else}}<em>None</em>{{end}}
+        {{if .Account.DigitalOceanToken}}{{.Account.DigitalOceanToken}}{{else}}<em>None</em>{{end}}
         <button hx-get="/token/add" hx-target="#settings">Edit</button>
     </div>
 </div>
 <div id="endpoints">
     <h3>Endpoints</h3>
     <button hx-get="/endpoints/add" hx-target="#endpoints">Add</button>
-    {{range .Endpoints}}
+    {{range .Account.Endpoints}}
     <details>
-        <summary>{{.ID}} | {{.Datacenter}} | {{.IP}}</summary>
-        <button hx-delete="/endpoints/{{.ID}}" hx-target="#endpoints">Delete</button>
-        {{range .Clients}}
+        <summary>{{.Account.ID}} | {{.Account.Datacenter}} | {{.Account.IP}}</summary>
+        <button hx-delete="/endpoints/{{.Account.ID}}" hx-target="#endpoints">Delete</button>
+        {{range .Account.Clients}}
         <details>
             <summary>{{.ID}}</summary>
             <pre>{{.Config}}</pre>
-            <a href="/endpoints/{{.EndpointID}}/{{.ID}}">Download</a>
-            <img src="data:image/png;base64,{{.QR}}" alt="QR Code">
+            <a href="/endpoints/{{.Account.EndpointID}}/{{.Account.ID}}">Download</a>
+            <img src="data:image/png;base64,{{.Account.QR}}" alt="QR Code">
         </details>
         {{end}}
     </details>

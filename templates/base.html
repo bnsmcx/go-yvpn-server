@@ -12,8 +12,11 @@
             <h1>yVPN, <em>Your VPN</em></h1>
             <nav>
                 <ul>
-                    <li><a href="/logout">Logout</a></li>
-                    <li><a href="/login">Login</a></li>
+                    {{ if .LoggedIn }}
+                        <li><a href="/logout">Logout</a></li>
+                    {{ else }}
+                        <li><a href="/login">Login</a></li>
+                    {{ end }}
                 </ul>
             </nav>
         </header>

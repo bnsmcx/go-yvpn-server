@@ -35,6 +35,7 @@ func main() {
 
 	// Public Routes
 	r.Group(func(r chi.Router) {
+		r.Use(auth.CheckSession)
 		r.Get("/", ux.RenderLanding)
 		r.Get("/signup", ux.RenderSignup)
 		r.Get("/login", ux.RenderLogin)
@@ -45,7 +46,7 @@ func main() {
 	// Private Routes
 	// Require Authentication
 	r.Group(func(r chi.Router) {
-		r.Use(auth.UserSession)
+		r.Use(auth.MandateSession)
 
 		r.Get("/dashboard", ux.RenderDashboard)
 		r.Get("/logout", auth.HandleLogout)

@@ -9,6 +9,11 @@ import (
 	"yvpn_server/do"
 )
 
+type pageData struct {
+	LoggedIn bool
+	Account  *db.Account
+}
+
 func RenderLanding(w http.ResponseWriter, r *http.Request) {
 	// Parse the templates
 	tmpl, err := template.ParseFiles("templates/base.html", "templates/landing.html")
@@ -17,8 +22,15 @@ func RenderLanding(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// check if user is logged in, add to page data
+	var pd pageData
+	id := r.Context().Value("id")
+	if id != nil {
+		pd.LoggedIn = true
+	}
+
 	// Execute the "layout" template and send it to the ResponseWriter.
-	if err := tmpl.Execute(w, nil); err != nil {
+	if err := tmpl.Execute(w, pd); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
@@ -30,8 +42,15 @@ func RenderSignup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// check if user is logged in, add to page data
+	var pd pageData
+	id := r.Context().Value("id")
+	if id != nil {
+		pd.LoggedIn = true
+	}
+
 	// Execute the "layout" template and send it to the ResponseWriter.
-	if err := tmpl.Execute(w, nil); err != nil {
+	if err := tmpl.Execute(w, pd); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
@@ -44,8 +63,15 @@ func RenderLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// check if user is logged in, add to page data
+	var pd pageData
+	id := r.Context().Value("id")
+	if id != nil {
+		pd.LoggedIn = true
+	}
+
 	// Execute the "layout" template and send it to the ResponseWriter.
-	if err := tmpl.Execute(w, nil); err != nil {
+	if err := tmpl.Execute(w, pd); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
@@ -58,6 +84,12 @@ func RenderDashboard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// populate page data
+	pd := pageData{
+		LoggedIn: true,
+		Account:  a,
+	}
+
 	// Parse the templates
 	tmpl, err := template.ParseFiles("templates/base.html", "templates/dashboard.html")
 	if err != nil {
@@ -66,7 +98,7 @@ func RenderDashboard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Execute the "layout" template and send it to the ResponseWriter.
-	if err := tmpl.Execute(w, a); err != nil {
+	if err := tmpl.Execute(w, pd); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
