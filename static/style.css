@@ -37,8 +37,9 @@ nav ul li {
     margin-right: 20px;
 }
 
-nav ul li a {
+.button {
     text-decoration: none;
+    background-color: transparent;
     color: #5C3723;
     border-radius: 6px;
     border-style: solid;
@@ -47,7 +48,7 @@ nav ul li a {
     padding: .3rem;
 }
 
-nav ul li a:hover {
+.button:hover {
     border-radius: 6px;
     border-style: solid;
     border-width: 2px;
@@ -69,6 +70,16 @@ main {
     margin-top: 1rem;
     padding: 20px;
     border: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+}
+
+form div {
+    padding-right: 250px;
+    padding-left: 250px;
+    display: flex;
+    text-align: left;
+    justify-content: space-between;
 }
 
 /* Responsive design for small screens */
