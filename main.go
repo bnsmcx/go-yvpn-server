@@ -36,9 +36,11 @@ func main() {
 	// Public Routes
 	r.Group(func(r chi.Router) {
 		r.Use(auth.CheckSession)
+
 		r.Get("/", ux.RenderLanding)
 		r.Get("/signup", ux.RenderSignup)
 		r.Get("/login", ux.RenderLogin)
+
 		r.Post("/signup", ux.SignupHandler)
 		r.Post("/login", auth.Login)
 	})
