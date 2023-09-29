@@ -41,12 +41,14 @@ func ActivationHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := r.ParseForm(); err != nil {
+		log.Println(err)
 		http.Error(w, "Unable to parse form", http.StatusBadRequest)
 		return
 	}
 
 	id, err := uuid.Parse(r.PostFormValue("credit-code"))
 	if err != nil {
+		log.Println(err)
 		http.Error(w, "Invalid credit id", http.StatusBadRequest)
 		return
 	}
@@ -58,9 +60,15 @@ func ActivationHandler(w http.ResponseWriter, r *http.Request) {
 
 	a, err := db.GetAccount(id)
 	if err != nil {
+		log.Println(err)
 		http.Error(w, "Invalid credit id", http.StatusBadRequest)
 		return
 	}
 
-	a.Activate(r.PostFormValue("password"))
+	err = a.Activate(r.PostFormValue("password"))
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Activation error", http.StatusInternalServerError)
+		return
+	}
 }
