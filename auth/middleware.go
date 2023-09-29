@@ -13,11 +13,13 @@ func MandateSession(next http.Handler) http.Handler {
 		if err != nil {
 			log.Println("missing session_id")
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
+			return
 		}
 		id, ok := getSession(cookie.Value)
 		if !ok {
 			log.Println("invalid session_id")
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
+			return
 		}
 		ctx := context.WithValue(r.Context(), "id", id)
 		ctx = context.WithValue(ctx, "session_id", cookie.Value)
