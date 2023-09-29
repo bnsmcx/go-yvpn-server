@@ -40,6 +40,7 @@ func main() {
 		r.Get("/", ux.RenderLanding)
 		r.Get("/signup", ux.RenderSignup)
 		r.Get("/activate", ux.RenderActivation)
+		r.Get("/login", ux.RenderLogin)
 
 		r.Post("/activate", ux.ActivationHandler)
 		r.Post("/signup", ux.SignupHandler)
