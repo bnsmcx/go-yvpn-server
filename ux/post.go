@@ -9,6 +9,7 @@ import (
 func SignupHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
 	}
 
 	if err := r.ParseForm(); err != nil {
@@ -16,16 +17,15 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	newAccount := auth.NewAccount{
-		Email:       r.PostFormValue("email"),
-		Password:    r.PostFormValue("password"),
-		ConfirmPass: r.PostFormValue("confirm-password"),
-		InviteCode:  r.PostFormValue("invite-code"),
+	newAccount := auth.NewCreditNode{
+		InviteCode: r.PostFormValue("invite-code"),
 	}
 
 	account, err := newAccount.Create()
 	if err != nil {
 		log.Println("Creating new account: " + err.Error())
+		http.Error(w, "Invalid invite code", http.StatusBadRequest)
+		return
 	}
 
 	log.Printf("Created new account: %s", account.ID.String())
