@@ -10,15 +10,15 @@
     <body>
         <header>
             <div>
-                <h1>yVPN, <em>Your VPN</em></h1>
+                <h1>yVPN</h1>
                 <nav>
                     <ul>
                         {{ if .LoggedIn }}
-                        <li><a class="button" href="/logout">Logout</a></li>
-                        <li><a class="button" href="/dashboard">Dashboard</a></li>
+                        <li><a class="button" href="/logout"><b>[</b> Logout <b>]</b></a></li>
+                        <li><a class="button" href="/dashboard"><b>[</b> Dashboard <b>]</b></a></li>
                         {{ else }}
-                        <li><a class="button" href="/login">Login</a></li>
-                        <li><a class="button" href="/signup">Signup</a></li>
+                        <li><a class="button" href="/login"><b>[</b> Activate <b>]</b></a></li>
+                        <li><a class="button" href="/signup"><b>[</b> Purchase <b>]</b></a></li>
                         {{ end }}
                     </ul>
                 </nav>

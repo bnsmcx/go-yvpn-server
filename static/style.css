@@ -41,18 +41,11 @@ nav ul li {
     text-decoration: none;
     background-color: transparent;
     color: #5C3723;
-    border-radius: 6px;
-    border-style: solid;
-    border-width: 2px;
-    border-color: #5C3723;
     padding: .3rem;
 }
 
 .button:hover {
-    border-radius: 6px;
-    border-style: solid;
-    border-width: 2px;
-    border-color: #69b4b2;
+    color: #69b4b2;
 }
 
 /* Center the content pane */
