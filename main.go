@@ -44,7 +44,7 @@ func main() {
 
 		r.Post("/activate", ux.ActivationHandler)
 		r.Post("/signup", ux.SignupHandler)
-		//r.Post("/login", auth.Login)
+		r.Post("/login", auth.Login)
 	})
 
 	// Private Routes
