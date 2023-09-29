@@ -151,3 +151,21 @@ func RenderAddEndpoint(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
+
+func RenderNewCreditNode(w http.ResponseWriter, r *http.Request, id uuid.UUID) {
+	// Parse the templates
+	tmpl, err := template.ParseFiles("templates/base.html", "templates/credit_node.html")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	n, err := db.GetAccount(id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	if err := tmpl.Execute(w, n); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}

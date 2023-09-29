@@ -29,5 +29,5 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	log.Printf("Created new account: %s", account.ID.String())
-	http.Redirect(w, r, "/login", http.StatusSeeOther)
+	RenderNewCreditNode(w, r, account.ID)
 }
