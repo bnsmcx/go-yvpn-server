@@ -1,8 +1,8 @@
 {{define "content"}}
-<form action="/signup" method="post">
+<form action="/activate" method="post">
     <div>
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required pattern="[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+" title="Enter a valid email address">
+        <label for="credit-code">Credit Code:</label>
+        <input type="text" id="credit-code" name="invite-code">
     </div>
     <div>
         <label for="password">Password:</label>
@@ -11,10 +11,6 @@
     <div>
         <label for="confirm-password">Confirm Password:</label>
         <input type="password" id="confirm-password" name="confirm-password" required>
-    </div>
-    <div>
-        <label for="invite-code">Invite Code:</label>
-        <input type="text" id="invite-code" name="invite-code">
     </div>
     <input class="button" type="submit" value="Submit">
 </form>

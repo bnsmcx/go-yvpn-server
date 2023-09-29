@@ -34,6 +34,7 @@ func RenderLanding(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
+
 func RenderSignup(w http.ResponseWriter, r *http.Request) {
 	// Parse the templates
 	tmpl, err := template.ParseFiles("templates/base.html", "templates/signup.html")
@@ -51,6 +52,19 @@ func RenderSignup(w http.ResponseWriter, r *http.Request) {
 
 	// Execute the "layout" template and send it to the ResponseWriter.
 	if err := tmpl.Execute(w, pd); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+func RenderActivation(w http.ResponseWriter, r *http.Request) {
+	// Parse the templates
+	tmpl, err := template.ParseFiles("templates/base.html", "templates/activate.html")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if err := tmpl.Execute(w, nil); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
