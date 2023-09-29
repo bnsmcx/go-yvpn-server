@@ -71,4 +71,6 @@ func ActivationHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Activation error", http.StatusInternalServerError)
 		return
 	}
+
+	http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
 }
