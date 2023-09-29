@@ -41,7 +41,7 @@ func main() {
 		r.Get("/signup", ux.RenderSignup)
 		r.Get("/activate", ux.RenderActivation)
 
-		//r.Post("/activate", ux.ActivationHandler)
+		r.Post("/activate", ux.ActivationHandler)
 		r.Post("/signup", ux.SignupHandler)
 		//r.Post("/login", auth.Login)
 	})
