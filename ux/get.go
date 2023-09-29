@@ -35,9 +35,9 @@ func RenderLanding(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RenderSignup(w http.ResponseWriter, r *http.Request) {
+func RenderPurchase(w http.ResponseWriter, r *http.Request) {
 	// Parse the templates
-	tmpl, err := template.ParseFiles("templates/base.html", "templates/signup.html")
+	tmpl, err := template.ParseFiles("templates/base.html", "templates/purchase.html")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

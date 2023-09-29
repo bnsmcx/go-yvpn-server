@@ -38,12 +38,12 @@ func main() {
 		r.Use(auth.CheckSession)
 
 		r.Get("/", ux.RenderLanding)
-		r.Get("/signup", ux.RenderSignup)
+		r.Get("/purchase", ux.RenderPurchase)
 		r.Get("/activate", ux.RenderActivation)
 		r.Get("/login", ux.RenderLogin)
 
 		r.Post("/activate", ux.ActivationHandler)
-		r.Post("/signup", ux.SignupHandler)
+		r.Post("/purchase", ux.PurchaseHandler)
 		r.Post("/login", auth.Login)
 	})
 
