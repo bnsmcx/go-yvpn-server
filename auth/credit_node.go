@@ -2,7 +2,9 @@ package auth
 
 import (
 	"errors"
+	"fmt"
 	"github.com/google/uuid"
+	"math/rand"
 	"os"
 	"yvpn_server/db"
 )
@@ -19,7 +21,8 @@ func (n *NewCreditNode) Create() (*db.Account, error) {
 
 	// Create and save the DB record
 	newRecord := db.Account{
-		ID: uuid.New(),
+		ID:  uuid.New(),
+		Pin: fmt.Sprintf("%04d", rand.Intn(9999)),
 	}
 
 	err := newRecord.Save()

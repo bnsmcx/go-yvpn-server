@@ -15,6 +15,7 @@ type Account struct {
 	BearerToken       string
 	DigitalOceanToken string
 	Endpoints         []Endpoint `gorm:"foreignKey:AccountID"`
+	Pin               string
 }
 
 func (a *Account) Activate(password string) error {
