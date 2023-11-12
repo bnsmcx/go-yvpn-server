@@ -14,14 +14,14 @@
     <button hx-get="/endpoints/add" hx-target="#endpoints">Add</button>
     {{range .Account.Endpoints}}
     <details>
-        <summary>{{.Account.ID}} | {{.Account.Datacenter}} | {{.Account.IP}}</summary>
-        <button hx-delete="/endpoints/{{.Account.ID}}" hx-target="#endpoints">Delete</button>
-        {{range .Account.Clients}}
+        <summary>{{.ID}} | {{.Datacenter}} | {{.IP}}</summary>
+        <button hx-delete="/endpoints/{{.ID}}" hx-target="#endpoints">Delete</button>
+        {{range .Clients}}
         <details>
             <summary>{{.ID}}</summary>
             <pre>{{.Config}}</pre>
-            <a href="/endpoints/{{.Account.EndpointID}}/{{.Account.ID}}">Download</a>
-            <img src="data:image/png;base64,{{.Account.QR}}" alt="QR Code">
+            <a href="/endpoints/{{.EndpointID}}/{{.ID}}">Download</a>
+            <img src="data:image/png;base64,{{.QR}}" alt="QR Code">
         </details>
         {{end}}
     </details>
