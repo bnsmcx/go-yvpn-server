@@ -56,19 +56,6 @@ func RenderPurchase(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RenderActivation(w http.ResponseWriter, r *http.Request) {
-	// Parse the templates
-	tmpl, err := template.ParseFiles("templates/base.html", "templates/activate.html")
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	if err := tmpl.Execute(w, nil); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-}
-
 func RenderLogin(w http.ResponseWriter, r *http.Request) {
 	// Parse the templates
 	tmpl, err := template.ParseFiles("templates/base.html", "templates/login.html")
