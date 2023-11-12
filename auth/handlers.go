@@ -2,7 +2,6 @@ package auth
 
 import (
 	"github.com/google/uuid"
-	"golang.org/x/crypto/bcrypt"
 	"log"
 	"net/http"
 	"yvpn_server/db"
@@ -25,7 +24,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	id := r.PostFormValue("credit-id")
-	password := r.PostFormValue("password")
+	pin := r.PostFormValue("pin")
 
 	uid, err := uuid.Parse(id)
 	if err != nil {
@@ -39,10 +38,16 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "invalid credit id", http.StatusUnauthorized)
 	}
 
-	err = bcrypt.CompareHashAndPassword(account.Password, []byte(password))
-	if err != nil {
-		log.Println("failed login attempt, invalid password")
-		http.Error(w, "invalid password", http.StatusUnauthorized)
+	if account.Pin != pin {
+		log.Println("failed login attempt, invalid pin")
+		http.Error(w, "invalid pin", http.StatusUnauthorized)
+	}
+
+	if !account.Activated {
+		if err := account.Activate(); err != nil {
+			log.Println("error activating card")
+			http.Error(w, "", http.StatusInternalServerError)
+		}
 	}
 
 	sessionID, err := createSession(account.ID)
