@@ -1,4 +1,13 @@
 {{define "content"}}
-<b>Here's your credit id:</b> <code>{{ .ID }}</code>
-<b>Here's your pin:</b> <code>{{ .Pin }}</code>
+<div class="card">
+    <h2>Card Title</h2>
+    <label>
+        ID
+        <input type="text" value="{{ .ID }}" readonly>
+    </label>
+    <label>
+        PIN
+        <input type="text" value="{{ .Pin }}" readonly>
+    </label>
+</div>
 {{end}}
