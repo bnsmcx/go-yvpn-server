@@ -34,19 +34,22 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 	account, err := db.GetAccount(uid)
 	if err != nil {
-		log.Println("failed login attempt, invalid email")
+		log.Println("account not found")
 		http.Error(w, "invalid credit id", http.StatusUnauthorized)
+		return
 	}
 
 	if account.Pin != pin {
 		log.Println("failed login attempt, invalid pin")
 		http.Error(w, "invalid pin", http.StatusUnauthorized)
+		return
 	}
 
 	if !account.Activated {
 		if err := account.Activate(); err != nil {
 			log.Println("error activating card")
 			http.Error(w, "", http.StatusInternalServerError)
+			return
 		}
 	}
 
@@ -54,6 +57,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("error creating session key")
 		http.Error(w, "", http.StatusInternalServerError)
+		return
 	}
 
 	// Create and set the cookie
