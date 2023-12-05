@@ -48,3 +48,7 @@ header {
 .nav-space {
     flex-grow: 1;
 }
+
+#content {
+    padding: 1rem;
+}
