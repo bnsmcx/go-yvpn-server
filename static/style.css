@@ -83,6 +83,12 @@ details > summary::-webkit-details-marker {
     color: #BCBCBD;
 }
 
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 form {
     width: 100%; /* Full width to accommodate label-input pairs */
     max-width: 500px; /* Adjust as needed */

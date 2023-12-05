@@ -1,8 +1,10 @@
 {{define "content"}}
-<h2>Dashboard</h2>
+<div class="page-header">
+    <h2>Dashboard</h2>
+    <a class="button" href="/logout">[ Logout ]</a>
+</div>
 <div id="settings">
     <h3>Settings</h3>
-    <div><b><a href="/logout">Logout</a></div>
     <div>
         <b>Digital Ocean Token: </b>
         {{if .Account.DigitalOceanToken}}{{.Account.DigitalOceanToken}}{{else}}<em>None</em>{{end}}
