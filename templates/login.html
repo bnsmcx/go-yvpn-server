@@ -1,13 +1,13 @@
 {{define "content"}}
 <form action="/login" method="post">
-    <div class="form-group">
-        <label for="credit-id">Credit id:</label>
-        <input type="text" id="credit-id" name="credit-id" required title="Enter your credit id">
-    </div>
-    <div class="form-group">
-        <label for="pin">Pin:</label>
-        <input type="password" id="pin" name="pin" required>
-    </div>
+    <label class="form-group">
+        Credit id:
+        <input type="text" name="credit-id" required title="Enter your credit id">
+    </label>
+    <label class="form-group">
+        Pin:
+        <input type="password" name="pin" required>
+    </label>
     <p></p>
     <input class="button form-group" type="submit" value="[ Submit ]">
 </form>
