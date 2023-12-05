@@ -28,21 +28,27 @@ header {
     padding: 0 1rem;
 }
 
-.nav-item {
+.button {
+    background: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
     border-radius: 10px;
     margin-left: .5rem;
     padding: .5rem;
     color: #00D992;
     text-decoration: none;
+    border: 1px solid rgba(0, 0, 0, 0);
 }
 
 .nav-item-left {
     margin-right: auto;
 }
 
-.nav-item:hover {
+.button:hover {
     font-weight: bold;
-    box-shadow: 0 0 0 2px rgba(6, 24, 44, 0.4), 0 4px 6px -1px rgba(6, 24, 44, 0.65), inset 0 1px 0 hsla(0, 0%, 100%, 0.08);
+    border-radius: 10px;
+    border: 1px solid #00D992;
 }
 
 .nav-space {
@@ -51,4 +57,27 @@ header {
 
 #content {
     padding: 1rem;
+    color: #BCBCBD;
+}
+
+form {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+input {
+    color: #00D992;
+    font-weight: bolder;
+    background-color: #254645;
+    border-radius: 10px;
+    border-color: #0b1d1f;
+    padding: .5rem 1rem;
+}
+
+input[type="text"]:focus {
+    outline: none; /* Removes the default focus outline */
+    border-color: #00D992;
 }
