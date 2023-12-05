@@ -61,11 +61,29 @@ header {
 }
 
 form {
-    text-align: center;
+    width: 100%; /* Full width to accommodate label-input pairs */
+    max-width: 500px; /* Adjust as needed */
+    margin: auto; /* Centers the form in the parent element */
+    padding: 20px; /* Optional padding */
+    box-sizing: border-box; /* Includes padding and border in the width */
+}
+
+.form-group {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
+    width: 100%; /* Ensures each group takes full width of the form */
+    margin-bottom: 10px; /* Spacing between each form group */
+}
+
+.form-group label {
+    margin-right: 10px; /* Space between label and input */
+}
+
+.form-group input {
+    text-align: right; /* Aligns text to the right */
+    flex-grow: 1; /* Allows the input field to grow and fill available space */
+    max-width: 50%;
 }
 
 input {
