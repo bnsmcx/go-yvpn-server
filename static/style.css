@@ -1,83 +1,50 @@
-/* Reset some default browser styles */
-body, h1, h2, h3, p, ul {
-    margin: 0;
-    padding: 0;
+html {
+    background-color: #152226;
+    font-family: "DejaVu Sans Mono", monospace;
 }
 
 body {
-    background-color: #5C3723;
+    background-color: #0b1d1f;
+    width: 100%;
+    max-width: 750px;
+    min-height: 100vh;
+    margin: 0 auto;
+}
+
+@media (max-width: 750px) {
+    body {
+        width: auto;
+    }
 }
 
 header {
+    background-color: #254645;
+}
+
+.navbar {
     display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-header div {
-    width: 1000px;
-    background-color: #EDDDAA;
-    color: #5C3723;
-    text-align: center;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-}
-
-/* Style the navigation menu */
-nav {
-    margin-top: .5rem;
-}
-
-nav ul {
-    list-style: none;
-}
-
-nav ul li {
-    display: inline;
-    margin-right: 20px;
-}
-
-.button {
-    text-decoration: none;
-    background-color: transparent;
-    color: #5C3723;
-    padding: .3rem;
-}
-
-.button:hover {
-    color: #69b4b2;
-}
-
-/* Center the content pane */
-main {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#content {
-    background-color: #EDDDAA;
-    width: 1000px;
-    text-align: center;
-    box-sizing: border-box;
-    margin-top: 1rem;
-    padding: 20px;
-    border: 1px solid #ccc;
-    display: flex;
-    flex-direction: column;
-}
-
-form div {
-    padding-right: 250px;
-    padding-left: 250px;
-    display: flex;
-    text-align: left;
     justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
 }
 
-/* Responsive design for small screens */
-@media (max-width: 500px) {
-    .content-pane {
-        width: 100%;
-    }
+.nav-item {
+    border-radius: 10px;
+    margin-left: .5rem;
+    padding: .5rem;
+    color: #00D992;
+    text-decoration: none;
+}
+
+.nav-item-left {
+    margin-right: auto;
+}
+
+.nav-item:hover {
+    font-weight: bold;
+    box-shadow: 0 0 0 2px rgba(6, 24, 44, 0.4), 0 4px 6px -1px rgba(6, 24, 44, 0.65), inset 0 1px 0 hsla(0, 0%, 100%, 0.08);
+}
+
+.nav-space {
+    flex-grow: 1;
 }
