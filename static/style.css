@@ -11,12 +11,6 @@ body {
     margin: 0 auto;
 }
 
-@media (max-width: 750px) {
-    body {
-        width: auto;
-    }
-}
-
 header {
     background-color: #254645;
 }
@@ -26,6 +20,35 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 0 1rem;
+}
+
+.mobile-nav {
+    display: none;
+    text-align: right;
+}
+
+details > summary {
+    list-style: none;
+}
+
+details > summary > img {
+    height: 2rem;
+}
+
+details > summary::-webkit-details-marker {
+    display: none;
+}
+
+@media (max-width: 750px) {
+    body {
+        width: auto;
+    }
+    .navbar {
+        display: none;
+    }
+    .mobile-nav {
+        display: flex;
+    }
 }
 
 .button {
