@@ -1,16 +1,12 @@
 {{define "content"}}
-<div class="page-header">
-    <h2>Dashboard</h2>
-    <a class="button" href="/logout">[ Logout ]</a>
-</div>
-<div id="settings">
-    <h3>Settings</h3>
-    <div>
-        <b>Digital Ocean Token: </b>
-        {{if .Account.DigitalOceanToken}}{{.Account.DigitalOceanToken}}{{else}}<em>None</em>{{end}}
-        <button hx-get="/token/add" hx-target="#settings">Edit</button>
-    </div>
-</div>
+<details>
+    <summary class="button">[ Settings ]</summary>
+    <label class="form-group">
+        Digital Ocean Token:
+        <input type="text" name="pin" value="{{if .Account.DigitalOceanToken}}{{.Account.DigitalOceanToken}}{{else}}None{{end}}">
+    </label>
+    <input hx-get="/token/add" hx-target="#settings" class="button form-group" type="submit" value="[ Edit ]">
+</details>
 <div id="endpoints">
     <h3>Endpoints</h3>
     <button hx-get="/endpoints/add" hx-target="#endpoints">Add</button>

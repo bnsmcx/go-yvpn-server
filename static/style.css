@@ -6,7 +6,7 @@ html {
 body {
     background-color: #0b1d1f;
     width: 100%;
-    max-width: 750px;
+    max-width: 1000px;
     min-height: 100vh;
     margin: 0 auto;
 }
@@ -25,6 +25,12 @@ header {
 .mobile-nav {
     display: none;
     text-align: right;
+}
+
+.mobile-nav > summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 details > summary {
@@ -76,6 +82,7 @@ details > summary::-webkit-details-marker {
 
 .nav-space {
     flex-grow: 1;
+    text-align: center;
 }
 
 #content {
@@ -83,35 +90,29 @@ details > summary::-webkit-details-marker {
     color: #BCBCBD;
 }
 
-.page-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
 form {
-    width: 100%; /* Full width to accommodate label-input pairs */
-    max-width: 500px; /* Adjust as needed */
-    margin: auto; /* Centers the form in the parent element */
-    padding: 20px; /* Optional padding */
-    box-sizing: border-box; /* Includes padding and border in the width */
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .form-group {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%; /* Ensures each group takes full width of the form */
-    margin-bottom: 10px; /* Spacing between each form group */
+    width: 100%;
+    margin-bottom: 10px;
 }
 
 .form-group label {
-    margin-right: 10px; /* Space between label and input */
+    margin-right: 10px;
 }
 
 .form-group input {
-    text-align: right; /* Aligns text to the right */
-    flex-grow: 1; /* Allows the input field to grow and fill available space */
+    text-align: right;
+    flex-grow: 1;
     max-width: 50%;
 }
 
@@ -125,6 +126,6 @@ input {
 }
 
 input[type="text"]:focus, input[type="password"]:focus {
-    outline: none; /* Removes the default focus outline */
+    outline: none;
     border-color: #00D992;
 }

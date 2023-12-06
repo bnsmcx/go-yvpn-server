@@ -10,8 +10,9 @@ import (
 )
 
 type pageData struct {
-	LoggedIn bool
-	Account  *db.Account
+	LoggedIn  bool
+	Account   *db.Account
+	PageTitle string
 }
 
 func RenderLanding(w http.ResponseWriter, r *http.Request) {
@@ -24,6 +25,7 @@ func RenderLanding(w http.ResponseWriter, r *http.Request) {
 
 	// check if user is logged in, add to page data
 	var pd pageData
+	pd.PageTitle = "yVPN"
 	id := r.Context().Value("id")
 	if id != nil {
 		pd.LoggedIn = true
@@ -45,6 +47,7 @@ func RenderPurchase(w http.ResponseWriter, r *http.Request) {
 
 	// check if user is logged in, add to page data
 	var pd pageData
+	pd.PageTitle = "Purchase"
 	id := r.Context().Value("id")
 	if id != nil {
 		pd.LoggedIn = true
@@ -66,6 +69,7 @@ func RenderLogin(w http.ResponseWriter, r *http.Request) {
 
 	// check if user is logged in, add to page data
 	var pd pageData
+	pd.PageTitle = "Login"
 	id := r.Context().Value("id")
 	if id != nil {
 		pd.LoggedIn = true
@@ -87,8 +91,9 @@ func RenderDashboard(w http.ResponseWriter, r *http.Request) {
 
 	// populate page data
 	pd := pageData{
-		LoggedIn: true,
-		Account:  a,
+		LoggedIn:  true,
+		PageTitle: "Dashboard",
+		Account:   a,
 	}
 
 	// Parse the templates
