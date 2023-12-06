@@ -1,11 +1,20 @@
 {{define "content"}}
-<details>
+<details id="settings">
     <summary class="button">[ Settings ]</summary>
-    <label class="form-group">
-        Digital Ocean Token:
-        <input type="text" name="pin" value="{{if .Account.DigitalOceanToken}}{{.Account.DigitalOceanToken}}{{else}}None{{end}}">
-    </label>
-    <input hx-get="/token/add" hx-target="#settings" class="button form-group" type="submit" value="[ Edit ]">
+    <div class="details-contents">
+        <div class="setting">
+            <label>
+                Digital Ocean Token:
+                {{if .Account.DigitalOceanToken}}
+                <input type="text" name="pin" value="{{.Account.DigitalOceanToken}}">
+                <input hx-get="/token/add" hx-target="#settings" class="button" type="submit" value="[ Edit ]">
+                {{else}}
+                <input hx-get="/token/add" hx-target="#settings" class="button" type="submit" value="[ Add ]">
+                {{end}}
+            </label>
+
+        </div>
+    </div>
 </details>
 <div id="endpoints">
     <h3>Endpoints</h3>
