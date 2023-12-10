@@ -33,18 +33,6 @@ header {
     align-items: center;
 }
 
-details > summary {
-    list-style: none;
-}
-
-details > summary > img {
-    height: 2rem;
-}
-
-details > summary::-webkit-details-marker {
-    display: none;
-}
-
 @media (max-width: 750px) {
     body {
         width: auto;
@@ -129,14 +117,24 @@ input[type="text"]:focus, input[type="password"]:focus {
     border-color: #00D992;
 }
 
-#settings {
+details {
+    margin: .5rem;
     font-weight: bold;
     border-radius: 10px;
     border: 1px solid #254645;
 }
 
-#settings > summary {
+details > summary {
     text-align: center;
+    list-style: none;
+}
+
+details > summary > img {
+    height: 2rem;
+}
+
+details > summary::-webkit-details-marker {
+    display: none;
 }
 
 .details-contents {
