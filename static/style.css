@@ -103,6 +103,14 @@ form {
     max-width: 50%;
 }
 
+.form-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
 input {
     color: #00D992;
     font-weight: bolder;
@@ -118,7 +126,6 @@ input[type="text"]:focus, input[type="password"]:focus {
 }
 
 details {
-    margin: .5rem;
     font-weight: bold;
     border-radius: 10px;
     border: 1px solid #254645;
@@ -138,5 +145,5 @@ details > summary::-webkit-details-marker {
 }
 
 .details-contents {
-    padding: 1rem;
+    padding: 1px;
 }

@@ -16,28 +16,30 @@
         </div>
     </div>
 </details>
-<details id="endpoints">
-    <summary class="button">[ Endpoints ]</summary>
-    <div class="details-contents">
-        <button class="button" hx-get="/endpoints/add" hx-target="#endpoints">[ Add ]</button>
-        {{range .Account.Endpoints}}
-        <details>
-            <summary class="button">{{.ID}} | {{.Datacenter}} | {{.IP}}</summary>
-            <div class="details-contents">
-                <button hx-delete="/endpoints/{{.ID}}" hx-target="#endpoints">Delete</button>
-                {{range .Clients}}
-                <details>
-                    <summary class="button">{{.ID}}</summary>
-                    <div class="details-contents">
-                        <pre>{{.Config}}</pre>
-                        <a href="/endpoints/{{.EndpointID}}/{{.ID}}">Download</a>
-                        <img src="data:image/png;base64,{{.QR}}" alt="QR Code">
-                    </div>
-                </details>
-                {{end}}
-            </div>
-        </details>
-        {{end}}
-    </div>
-</details>
+<div id="endpoints">
+    <details>
+        <summary class="button">[ Endpoints ]</summary>
+        <div class="details-contents">
+            <button class="button" hx-get="/endpoints/add" hx-target="#endpoints">[ Add ]</button>
+            {{range .Account.Endpoints}}
+            <details>
+                <summary class="button">{{.ID}} | {{.Datacenter}} | {{.IP}}</summary>
+                <div class="details-contents">
+                    <button hx-delete="/endpoints/{{.ID}}" hx-target="#endpoints">Delete</button>
+                    {{range .Clients}}
+                    <details>
+                        <summary class="button">{{.ID}}</summary>
+                        <div class="details-contents">
+                            <pre>{{.Config}}</pre>
+                            <a href="/endpoints/{{.EndpointID}}/{{.ID}}">Download</a>
+                            <img src="data:image/png;base64,{{.QR}}" alt="QR Code">
+                        </div>
+                    </details>
+                    {{end}}
+                </div>
+            </details>
+            {{end}}
+        </div>
+    </details>
+</div>
 {{end}}
