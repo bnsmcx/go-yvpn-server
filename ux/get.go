@@ -166,12 +166,19 @@ func RenderNewCreditNode(w http.ResponseWriter, r *http.Request, id uuid.UUID) {
 		return
 	}
 
-	n, err := db.GetAccount(id)
+	a, err := db.GetAccount(id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
-	if err := tmpl.Execute(w, n); err != nil {
+	// populate page data
+	pd := pageData{
+		LoggedIn:  false,
+		PageTitle: "New Credit",
+		Account:   a,
+	}
+
+	if err := tmpl.Execute(w, pd); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }

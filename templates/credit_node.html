@@ -2,11 +2,11 @@
 <form>
     <label class="form-group">
         ID
-        <input type="text" value="{{ .ID }}" readonly>
+        <input type="text" value="{{ .Account.ID }}" readonly>
     </label>
     <label class="form-group">
         PIN
-        <input type="text" value="{{ .Pin }}" readonly>
+        <input type="text" value="{{ .Account.Pin }}" readonly>
     </label>
 </form>
 {{end}}
