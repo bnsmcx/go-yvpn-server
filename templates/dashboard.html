@@ -20,10 +20,9 @@
     <details>
         <summary class="button">[ Endpoints ]</summary>
         <div class="details-contents">
-            <button class="button" hx-get="/endpoints/add" hx-target="#endpoints">[ Add ]</button>
             {{range .Account.Endpoints}}
             <details>
-                <summary class="button">{{.ID}} | {{.Datacenter}} | {{.IP}}</summary>
+                <summary class="button">{{.Datacenter}} | {{if .IP}}{{.IP}}{{else}}Spawning...{{end}}</summary>
                 <div class="details-contents">
                     <button hx-delete="/endpoints/{{.ID}}" hx-target="#endpoints">Delete</button>
                     {{range .Clients}}
@@ -39,6 +38,7 @@
                 </div>
             </details>
             {{end}}
+            <button class="button" hx-get="/endpoints/add" hx-target="#endpoints">[ Add ]</button>
         </div>
     </details>
 </div>

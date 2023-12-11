@@ -125,10 +125,24 @@ input[type="text"]:focus, input[type="password"]:focus {
     border-color: #00D992;
 }
 
+select {
+    color: #00D992;
+    font-weight: bolder;
+    background-color: #254645;
+    border-radius: 10px;
+    border-color: #0b1d1f;
+    padding: .5rem 1rem;
+}
+
+
 details {
     font-weight: bold;
     border-radius: 10px;
     border: 1px solid #254645;
+    margin: .5rem 0;
+}
+
+details[open] {
 }
 
 details > summary {
