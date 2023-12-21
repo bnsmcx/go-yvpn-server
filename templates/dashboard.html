@@ -2,44 +2,36 @@
 <details id="settings">
     <summary class="button">[ Settings ]</summary>
     <div class="details-contents">
-        <div class="setting">
-            <label>
-                Digital Ocean Token:
-                {{if .Account.DigitalOceanToken}}
-                <input type="text" name="pin" value="{{.Account.DigitalOceanToken}}">
-                <input hx-get="/token/add" hx-target="#settings" class="button" type="submit" value="[ Edit ]">
-                {{else}}
-                <input hx-get="/token/add" hx-target="#settings" class="button" type="submit" value="[ Add ]">
-                {{end}}
-            </label>
-
-        </div>
+        <label class="setting">
+            Digital Ocean Token:
+            {{if .Account.DigitalOceanToken}}
+            <input type="text" name="pin" value="{{.Account.DigitalOceanToken}}">
+            <input hx-get="/token/add" hx-target="#settings" class="button" type="submit" value="[ Edit ]">
+            {{else}}
+            <input hx-get="/token/add" hx-target="#settings" class="button" type="submit" value="[ Add ]">
+            {{end}}
+        </label>
     </div>
 </details>
 <div id="endpoints">
+    {{range .Account.Endpoints}}
     <details>
-        <summary class="button">[ Endpoints ]</summary>
+        <summary class="button">{{.Datacenter}} | {{if .IP}}{{.IP}}{{else}}Spawning...{{end}}</summary>
         <div class="details-contents">
-            {{range .Account.Endpoints}}
+            <button hx-delete="/endpoints/{{.ID}}" hx-target="#endpoints">Delete</button>
+            {{range .Clients}}
             <details>
-                <summary class="button">{{.Datacenter}} | {{if .IP}}{{.IP}}{{else}}Spawning...{{end}}</summary>
+                <summary class="button">{{.ID}}</summary>
                 <div class="details-contents">
-                    <button hx-delete="/endpoints/{{.ID}}" hx-target="#endpoints">Delete</button>
-                    {{range .Clients}}
-                    <details>
-                        <summary class="button">{{.ID}}</summary>
-                        <div class="details-contents">
-                            <pre>{{.Config}}</pre>
-                            <a href="/endpoints/{{.EndpointID}}/{{.ID}}">Download</a>
-                            <img src="data:image/png;base64,{{.QR}}" alt="QR Code">
-                        </div>
-                    </details>
-                    {{end}}
+                    <pre>{{.Config}}</pre>
+                    <a href="/endpoints/{{.EndpointID}}/{{.ID}}">Download</a>
+                    <img src="data:image/png;base64,{{.QR}}" alt="QR Code">
                 </div>
             </details>
             {{end}}
-            <button class="button" hx-get="/endpoints/add" hx-target="#endpoints">[ Add ]</button>
         </div>
     </details>
+    {{end}}
+    <button class="button" hx-get="/endpoints/add" hx-target="#endpoints">[ Add ]</button>
 </div>
 {{end}}

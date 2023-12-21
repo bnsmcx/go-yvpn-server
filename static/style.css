@@ -142,9 +142,6 @@ details {
     margin: .5rem 0;
 }
 
-details[open] {
-}
-
 details > summary {
     text-align: center;
     list-style: none;
@@ -159,13 +156,31 @@ details > summary::-webkit-details-marker {
 }
 
 .details-contents {
-    padding: 1px;
+    padding: 1rem;
+}
+
+#settings {
+    border: none;
+}
+
+#settings[open] {
+    border-radius: 10px;
+    border: 1px solid #254645;
 }
 
 .setting {
-    margin: .5rem 1rem;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.setting > label > input[type="text"] {
-    width: fit-content;
+.setting input[type="text"] {
+    flex: 1;
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+#endpoints {
+    text-align: center;
 }
