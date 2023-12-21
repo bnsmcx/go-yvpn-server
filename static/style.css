@@ -33,18 +33,6 @@ header {
     align-items: center;
 }
 
-@media (max-width: 750px) {
-    body {
-        width: auto;
-    }
-    .navbar {
-        display: none;
-    }
-    .mobile-nav {
-        display: flex;
-    }
-}
-
 .button {
     background: none;
     cursor: pointer;
@@ -183,4 +171,19 @@ details > summary::-webkit-details-marker {
 
 #endpoints {
     text-align: center;
+}
+
+@media (max-width: 750px) {
+    body {
+        width: auto;
+    }
+    .navbar {
+        display: none;
+    }
+    .mobile-nav {
+        display: flex;
+    }
+    .setting {
+        flex-direction: column;
+    }
 }
