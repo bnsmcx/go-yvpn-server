@@ -161,3 +161,11 @@ details > summary::-webkit-details-marker {
 .details-contents {
     padding: 1px;
 }
+
+.setting {
+    margin: .5rem 1rem;
+}
+
+.setting > label > input[type="text"] {
+    width: fit-content;
+}
