@@ -147,8 +147,6 @@ details > summary::-webkit-details-marker {
 }
 
 #settings-dialog {
-    background-color: transparent;
-    border: none;
     text-align: center;
     border-radius: 10px;
     border: 1px solid #254645;
