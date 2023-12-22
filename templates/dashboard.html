@@ -7,6 +7,7 @@
         <summary class="button">{{.Datacenter}} | {{if .IP}}{{.IP}}{{else}}Spawning...{{end}}</summary>
         <div class="details-contents">
             <button class="button" hx-delete="/endpoints/{{.ID}}" hx-target="#endpoints">[ Delete Endpoint ]</button>
+            <a href="/client/{{.ID}}" class="button">[ Add Device ]</a>
             {{range .Clients}}
                 {{if .Active}}
                     <details>

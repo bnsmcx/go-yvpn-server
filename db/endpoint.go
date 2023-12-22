@@ -27,6 +27,14 @@ type Client struct {
 	QR         string
 }
 
+func (c *Client) Save() error {
+	result := database.Save(c)
+	if result.Error != nil {
+		return fmt.Errorf("saving client config: %s", result.Error)
+	}
+	return nil
+}
+
 func (e *Endpoint) Save() error {
 	result := database.Save(e)
 	if result.Error != nil {
@@ -74,4 +82,14 @@ func (e *Endpoint) DeleteClientConfigsForEndpoint() {
 	for _, c := range e.Clients {
 		database.Delete(c)
 	}
+}
+
+func (e *Endpoint) ActivateClient() error {
+	for _, c := range e.Clients {
+		if !c.Active {
+			c.Active = true
+			return c.Save()
+		}
+	}
+	return nil
 }

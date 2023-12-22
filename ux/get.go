@@ -1,10 +1,12 @@
 package ux
 
 import (
+	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
 	"html/template"
 	"log"
 	"net/http"
+	"strconv"
 	"yvpn_server/db"
 	"yvpn_server/do"
 )
@@ -181,4 +183,20 @@ func RenderNewCreditNode(w http.ResponseWriter, r *http.Request, id uuid.UUID) {
 	if err := tmpl.Execute(w, pd); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+}
+
+func ActivateClient(w http.ResponseWriter, r *http.Request) {
+	id, _ := strconv.Atoi(chi.URLParam(r, "endpoint"))
+	e, err := db.GetEndpoint(id)
+	if err != nil {
+		http.Error(w, "Invalid id", http.StatusBadRequest)
+		log.Println(err)
+		return
+	}
+	if err := e.ActivateClient(); err != nil {
+		http.Error(w, "Invalid id", http.StatusBadRequest)
+		log.Println(err)
+		return
+	}
+	http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
 }
