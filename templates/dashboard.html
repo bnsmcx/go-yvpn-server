@@ -12,9 +12,12 @@
                 {{if .Active}}
                     <details>
                         <summary class="button">{{.ID}}</summary>
-                        <div class="details-contents">
+                        <div class="config">
+                            <h3>Client Config:</h3>
                             <pre>{{.Config}}</pre>
-                            <a href="/endpoints/{{.EndpointID}}/{{.ID}}">Download</a>
+                            <a class="button" href="/endpoints/{{.EndpointID}}/{{.ID}}">[ Download ]</a>
+                            <p></p>
+                            <h3>Scan with the WireGuard app:</h3>
                             <img src="data:image/png;base64,{{.QR}}" alt="QR Code">
                         </div>
                     </details>
