@@ -1,19 +1,7 @@
 {{define "content"}}
-<details id="settings">
-    <summary class="button">[ Settings ]</summary>
-    <div class="details-contents">
-        <label class="setting">
-            Digital Ocean Token:
-            {{if .Account.DigitalOceanToken}}
-            <input type="text" name="pin" value="{{.Account.DigitalOceanToken}}">
-            <input hx-get="/token/add" hx-target="#settings" class="button" type="submit" value="[ Edit ]">
-            {{else}}
-            <input hx-get="/token/add" hx-target="#settings" class="button" type="submit" value="[ Add ]">
-            {{end}}
-        </label>
-    </div>
-</details>
 <div id="endpoints">
+    <button class="button" id="settings-button">[ Settings ]</button>
+    <button class="button" hx-get="/endpoints/add" hx-target="#endpoints">[ Add Endpoint ]</button>
     {{range .Account.Endpoints}}
     <details>
         <summary class="button">{{.Datacenter}} | {{if .IP}}{{.IP}}{{else}}Spawning...{{end}}</summary>
@@ -32,6 +20,29 @@
         </div>
     </details>
     {{end}}
-    <button class="button" hx-get="/endpoints/add" hx-target="#endpoints">[ Add ]</button>
 </div>
+<dialog id="settings-dialog">
+    <div id="settings" class="details-contents">
+        <label class="setting">
+            Digital Ocean Token:
+            {{if .Account.DigitalOceanToken}}
+            <input type="text" name="pin" value="{{.Account.DigitalOceanToken}}">
+            <input hx-get="/token/add" hx-target="#settings" class="button" type="submit" value="[ Edit ]">
+            {{else}}
+            <input hx-get="/token/add" hx-target="#settings" class="button" type="submit" value="[ Add ]">
+            {{end}}
+        </label>
+    </div>
+    <button class="button" id="close-settings">[ Close ]</button>
+</dialog>
+<script>
+    // JavaScript to handle the dialog open and close
+    document.getElementById('settings-button').addEventListener('click', function() {
+        document.getElementById('settings-dialog').showModal();
+    });
+
+    document.getElementById('close-settings').addEventListener('click', function() {
+        document.getElementById('settings-dialog').close();
+    });
+</script>
 {{end}}

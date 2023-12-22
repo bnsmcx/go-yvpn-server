@@ -124,7 +124,6 @@ select {
 
 
 details {
-    font-weight: bold;
     border-radius: 10px;
     border: 1px solid #254645;
     margin: .5rem 0;
@@ -147,13 +146,17 @@ details > summary::-webkit-details-marker {
     padding: 1rem;
 }
 
-#settings {
+#settings-dialog {
+    background-color: transparent;
     border: none;
+    text-align: center;
 }
 
-#settings[open] {
+#settings {
     border-radius: 10px;
     border: 1px solid #254645;
+    background-color: #0b1d1f;
+    color: #00D992;
 }
 
 .setting {
