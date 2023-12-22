@@ -6,16 +6,18 @@
     <details>
         <summary class="button">{{.Datacenter}} | {{if .IP}}{{.IP}}{{else}}Spawning...{{end}}</summary>
         <div class="details-contents">
-            <button class="button" hx-delete="/endpoints/{{.ID}}" hx-target="#endpoints">[ Delete ]</button>
+            <button class="button" hx-delete="/endpoints/{{.ID}}" hx-target="#endpoints">[ Delete Endpoint ]</button>
             {{range .Clients}}
-            <details>
-                <summary class="button">{{.ID}}</summary>
-                <div class="details-contents">
-                    <pre>{{.Config}}</pre>
-                    <a href="/endpoints/{{.EndpointID}}/{{.ID}}">Download</a>
-                    <img src="data:image/png;base64,{{.QR}}" alt="QR Code">
-                </div>
-            </details>
+                {{if .Active}}
+                    <details>
+                        <summary class="button">{{.ID}}</summary>
+                        <div class="details-contents">
+                            <pre>{{.Config}}</pre>
+                            <a href="/endpoints/{{.EndpointID}}/{{.ID}}">Download</a>
+                            <img src="data:image/png;base64,{{.QR}}" alt="QR Code">
+                        </div>
+                    </details>
+                {{end}}
             {{end}}
         </div>
     </details>

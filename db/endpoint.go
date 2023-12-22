@@ -21,6 +21,7 @@ type Endpoint struct {
 
 type Client struct {
 	ID         uuid.UUID `gorm:"primaryKey"`
+	Active     bool
 	EndpointID int
 	Config     string
 	QR         string
@@ -67,4 +68,10 @@ func (e *Endpoint) AddClient(clientIP string, privKey wgtypes.Key) error {
 func (e *Endpoint) Delete() error {
 	result := database.Delete(e)
 	return result.Error
+}
+
+func (e *Endpoint) DeleteClientConfigsForEndpoint() {
+	for _, c := range e.Clients {
+		database.Delete(c)
+	}
 }

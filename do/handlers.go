@@ -50,6 +50,9 @@ func HandleDeleteEndpoint(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// delete the endpoint's client configs
+	e.DeleteClientConfigsForEndpoint()
+
 	// delete the endpoint on DO
 	accountID := r.Context().Value("id").(uuid.UUID)
 	a, err := db.GetAccount(accountID)
