@@ -150,9 +150,6 @@ details > summary::-webkit-details-marker {
     background-color: transparent;
     border: none;
     text-align: center;
-}
-
-#settings {
     border-radius: 10px;
     border: 1px solid #254645;
     background-color: #0b1d1f;
