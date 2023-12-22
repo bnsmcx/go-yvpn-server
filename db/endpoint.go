@@ -35,6 +35,11 @@ func (c *Client) Save() error {
 	return nil
 }
 
+func (c *Client) Delete() error {
+	result := database.Delete(c)
+	return result.Error
+}
+
 func (e *Endpoint) Save() error {
 	result := database.Save(e)
 	if result.Error != nil {

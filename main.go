@@ -58,6 +58,7 @@ func main() {
 		r.Get("/client/{endpoint}", ux.ActivateClient)
 
 		r.Delete("/endpoints/{id}", do.HandleDeleteEndpoint)
+		r.Delete("/client/{id}", db.HandleDeleteClient)
 
 		r.Post("/endpoints/add", do.HandleCreateEndpoint)
 		r.Post("/token/add", do.AddToken)

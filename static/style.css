@@ -150,7 +150,7 @@ details > summary::-webkit-details-marker {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-bottom: 1rem;
+    padding: 1rem;
 }
 
 .config pre {

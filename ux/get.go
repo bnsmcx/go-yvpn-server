@@ -199,4 +199,5 @@ func ActivateClient(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
+	w.Header().Set("HX-Redirect", "/dashboard")
 }

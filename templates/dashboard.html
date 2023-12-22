@@ -13,6 +13,10 @@
                     <details>
                         <summary class="button">{{.ID}}</summary>
                         <div class="config">
+                            <div>
+                                <a class="button" hx-delete="/client/{{.ID}}">[ Delete ]</a>
+                                <a class="button" href="">[ Rename ]</a>
+                            </div>
                             <h3>Client Config:</h3>
                             <pre>{{.Config}}</pre>
                             <a class="button" href="/endpoints/{{.EndpointID}}/{{.ID}}">[ Download ]</a>
