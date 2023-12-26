@@ -14,8 +14,8 @@
                         <summary class="button">{{.ID}}</summary>
                         <div class="config">
                             <div>
-                                <a class="button" hx-delete="/client/{{.ID}}">[ Delete ]</a>
-                                <a class="button" href="">[ Rename ]</a>
+                                <button class="button" hx-delete="/client/{{.ID}}">[ Delete ]</button>
+                                <button class="button" id="rename-{{.ID}}">[ Rename ]</button>
                             </div>
                             <h3>Client Config:</h3>
                             <pre>{{.Config}}</pre>
@@ -25,6 +25,26 @@
                             <img src="data:image/png;base64,{{.QR}}" alt="QR Code">
                         </div>
                     </details>
+                    <script>
+                        // JavaScript to handle the dialog open and close
+                        document.getElementById('rename-{{.ID}}').addEventListener('click', function() {
+                            document.getElementById('rename-{{.ID}}-dialog').showModal();
+                        });
+
+                        document.getElementById('close-rename-dialog').addEventListener('click', function() {
+                            document.getElementById('rename-{{.ID}}-dialog').close();
+                        });
+                    </script>
+                    <dialog id="rename-{{.ID}}-dialog">
+                        <div class="details-contents">
+                            <label class="setting">
+                                Device Name:
+                                <input type="text" name="pin" value="{{.ID}}">
+                                <input class="button" type="submit" value="[ Rename ]">
+                            </label>
+                        </div>
+                        <button class="button" id="close-rename-dialog">[ Close ]</button>
+                    </dialog>
                 {{end}}
             {{end}}
         </div>
