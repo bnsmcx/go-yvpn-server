@@ -27,11 +27,13 @@
                     </details>
                     <dialog id="rename-{{.ID}}-dialog">
                         <div class="details-contents">
-                            <label class="setting">
-                                Device Name:
-                                <input type="text" name="pin" value="{{.ID}}">
-                                <input class="button" type="submit" value="[ Rename ]">
-                            </label>
+                            <form action="/client/{{.ID}}" method="post">
+                                <label class="setting">
+                                    Device Name:
+                                    <input type="text" name="name" value="{{.ID}}">
+                                    <input class="button" type="submit" value="[ Rename ]">
+                                </label>
+                            </form>
                         </div>
                         <button class="button" id="close-rename-{{.ID}}-dialog">[ Close ]</button>
                     </dialog>
