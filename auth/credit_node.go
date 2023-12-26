@@ -25,16 +25,5 @@ func (n *NewCreditNode) Create() (*db.Account, error) {
 		Pin: fmt.Sprintf("%04d", rand.Intn(9999)),
 	}
 
-	err := newRecord.Save()
-	if err != nil {
-		return &db.Account{}, err
-	}
-
-	// Read the account from the DB
-	account, err := db.GetAccount(newRecord.ID)
-	if err != nil {
-		return &db.Account{}, errors.New("error retrieving account")
-	}
-
-	return account, nil
+	return &newRecord, newRecord.Save()
 }
