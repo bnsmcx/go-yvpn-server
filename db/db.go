@@ -100,6 +100,32 @@ func GetClientConfigFile(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func HandleRenameClient(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "error parsing form", http.StatusBadRequest)
+		return
+	}
+	name := r.FormValue("name")
+	id := uuid.MustParse(chi.URLParam(r, "id"))
+
+	c, err := GetClient(id)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "error renaming client", http.StatusBadRequest)
+		return
+	}
+
+	c.Name = name
+	if err := c.Save(); err != nil {
+		log.Println(err)
+		http.Error(w, "error renaming client", http.StatusBadRequest)
+		return
+	}
+	http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
+}
+
 func HandleDeleteClient(w http.ResponseWriter, r *http.Request) {
 	id := uuid.MustParse(chi.URLParam(r, "id"))
 	c, err := GetClient(id)

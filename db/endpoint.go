@@ -25,6 +25,7 @@ type Client struct {
 	EndpointID int
 	Config     string
 	QR         string
+	Name       string
 }
 
 func (c *Client) Save() error {

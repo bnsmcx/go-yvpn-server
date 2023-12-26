@@ -60,6 +60,7 @@ func main() {
 		r.Delete("/endpoints/{id}", do.HandleDeleteEndpoint)
 		r.Delete("/client/{id}", db.HandleDeleteClient)
 
+		r.Post("/client/{id}", db.HandleRenameClient)
 		r.Post("/endpoints/add", do.HandleCreateEndpoint)
 		r.Post("/token/add", do.AddToken)
 	})
