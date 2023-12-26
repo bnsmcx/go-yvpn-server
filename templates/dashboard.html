@@ -25,16 +25,6 @@
                             <img src="data:image/png;base64,{{.QR}}" alt="QR Code">
                         </div>
                     </details>
-                    <script>
-                        // JavaScript to handle the dialog open and close
-                        document.getElementById('rename-{{.ID}}').addEventListener('click', function() {
-                            document.getElementById('rename-{{.ID}}-dialog').showModal();
-                        });
-
-                        document.getElementById('close-rename-dialog').addEventListener('click', function() {
-                            document.getElementById('rename-{{.ID}}-dialog').close();
-                        });
-                    </script>
                     <dialog id="rename-{{.ID}}-dialog">
                         <div class="details-contents">
                             <label class="setting">
@@ -43,8 +33,18 @@
                                 <input class="button" type="submit" value="[ Rename ]">
                             </label>
                         </div>
-                        <button class="button" id="close-rename-dialog">[ Close ]</button>
+                        <button class="button" id="close-rename-{{.ID}}-dialog">[ Close ]</button>
                     </dialog>
+                    <script>
+                        // JavaScript to handle the dialog open and close
+                        document.getElementById('rename-{{.ID}}').addEventListener('click', function() {
+                            document.getElementById('rename-{{.ID}}-dialog').showModal();
+                        });
+
+                        document.getElementById('close-rename-{{.ID}}-dialog').addEventListener('click', function() {
+                            document.getElementById('rename-{{.ID}}-dialog').close();
+                        });
+                    </script>
                 {{end}}
             {{end}}
         </div>
