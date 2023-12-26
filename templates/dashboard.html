@@ -11,7 +11,7 @@
             {{range .Clients}}
                 {{if .Active}}
                     <details>
-                        <summary class="button">{{.ID}}</summary>
+                        <summary class="button">{{.Name}}</summary>
                         <div class="config">
                             <div>
                                 <button class="button" hx-delete="/client/{{.ID}}">[ Delete ]</button>
@@ -30,7 +30,7 @@
                             <form action="/client/{{.ID}}" method="post">
                                 <label class="setting">
                                     Device Name:
-                                    <input type="text" name="name" value="{{.ID}}">
+                                    <input type="text" name="name" value="{{.Name}}">
                                     <input class="button" type="submit" value="[ Rename ]">
                                 </label>
                             </form>

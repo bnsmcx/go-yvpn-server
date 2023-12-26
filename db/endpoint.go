@@ -71,6 +71,7 @@ func (e *Endpoint) AddClient(clientIP string, privKey wgtypes.Key) error {
 
 	e.Clients = append(e.Clients, Client{
 		ID:         uuid.New(),
+		Name:       "Your new client",
 		EndpointID: e.ID,
 		Config:     config,
 		QR:         qr,
