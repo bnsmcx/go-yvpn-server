@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"yvpn_server/auth"
 	"yvpn_server/db"
 	"yvpn_server/do"
 )
@@ -127,7 +128,7 @@ func RenderAddToken(w http.ResponseWriter, r *http.Request) {
 
 func RenderAddEndpoint(w http.ResponseWriter, r *http.Request) {
 	// Get account
-	a, err := db.GetAccount(r.Context().Value("id").(uuid.UUID))
+	a, err := auth.GetAccount(r.Context().Value("id").(uuid.UUID))
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "getting account", http.StatusUnauthorized)
