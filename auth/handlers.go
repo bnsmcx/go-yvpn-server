@@ -8,6 +8,7 @@ import (
 
 func HandleLogout(w http.ResponseWriter, r *http.Request) {
 	deleteSession(r.Context().Value("id").(uuid.UUID))
+	SetSessionCookie(w, "")
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 	return
 }
