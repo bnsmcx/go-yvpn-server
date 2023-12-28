@@ -18,7 +18,8 @@ func PurchaseHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	newAccount := auth.NewCreditNode{
-		InviteCode: r.PostFormValue("invite-code"),
+		InviteCode:        r.PostFormValue("invite-code"),
+		DigitalOceanToken: r.PostFormValue("do-token"),
 	}
 
 	account, err := newAccount.Create()
@@ -29,5 +30,11 @@ func PurchaseHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	log.Printf("Created new account: %s", account.ID.String())
-	RenderNewCreditNode(w, r, account.ID)
+	portkey, err := account.Encrypt()
+	if err != nil {
+		log.Println("Creating new account: " + err.Error())
+		http.Error(w, "Invalid invite code", http.StatusBadRequest)
+		return
+	}
+	RenderNewCreditNode(w, r, portkey)
 }

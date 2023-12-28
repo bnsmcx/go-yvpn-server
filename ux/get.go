@@ -16,6 +16,7 @@ type pageData struct {
 	LoggedIn  bool
 	Account   *db.Account
 	PageTitle string
+	PortKey   string
 }
 
 func RenderLanding(w http.ResponseWriter, r *http.Request) {
@@ -161,7 +162,7 @@ func RenderAddEndpoint(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RenderNewCreditNode(w http.ResponseWriter, r *http.Request, id uuid.UUID) {
+func RenderNewCreditNode(w http.ResponseWriter, r *http.Request, portkey string) {
 	// Parse the templates
 	tmpl, err := template.ParseFiles("templates/base.html", "templates/credit_node.html")
 	if err != nil {
@@ -169,16 +170,11 @@ func RenderNewCreditNode(w http.ResponseWriter, r *http.Request, id uuid.UUID) {
 		return
 	}
 
-	a, err := db.GetAccount(id)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-
 	// populate page data
 	pd := pageData{
 		LoggedIn:  false,
 		PageTitle: "New Credit",
-		Account:   a,
+		PortKey:   portkey,
 	}
 
 	if err := tmpl.Execute(w, pd); err != nil {

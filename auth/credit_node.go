@@ -8,10 +8,11 @@ import (
 )
 
 type NewCreditNode struct {
-	InviteCode string
+	InviteCode        string
+	DigitalOceanToken string
 }
 
-func (n *NewCreditNode) Create() (*db.Account, error) {
+func (n *NewCreditNode) Create() (*Account, error) {
 	// Validate Invite Code
 	if n.InviteCode != os.Getenv("YVPN_INVITE_CODE") {
 		return nil, errors.New("invalid invite code")
@@ -22,5 +23,14 @@ func (n *NewCreditNode) Create() (*db.Account, error) {
 		ID: uuid.New(),
 	}
 
-	return &newRecord, newRecord.Save()
+	if err := newRecord.Save(); err != nil {
+		return nil, err
+	}
+
+	a := Account{
+		DigitalOceanToken: n.DigitalOceanToken,
+		ID:                newRecord.ID,
+	}
+
+	return &a, nil
 }

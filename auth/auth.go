@@ -31,7 +31,7 @@ func Decrypt(pk string) (Account, error) {
 	if err != nil {
 		return Account{}, err
 	}
-	return Account{}, nil
+	return a, nil
 }
 
 func (a *Account) Encrypt() (string, error) {

@@ -22,7 +22,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	pk := r.PostFormValue("port-key")
+	pk := r.PostFormValue("portkey")
 
 	account, err := Decrypt(pk)
 	if err != nil {
