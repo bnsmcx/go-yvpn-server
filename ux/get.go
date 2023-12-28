@@ -17,6 +17,7 @@ type pageData struct {
 	Account   *db.Account
 	PageTitle string
 	PortKey   string
+	UserData  *auth.Account
 }
 
 func RenderLanding(w http.ResponseWriter, r *http.Request) {
@@ -86,8 +87,11 @@ func RenderLogin(w http.ResponseWriter, r *http.Request) {
 }
 
 func RenderDashboard(w http.ResponseWriter, r *http.Request) {
-	// Get the user account
-	a, err := db.GetAccount(r.Context().Value("id").(uuid.UUID))
+	// Get the user details
+	ud, err := auth.GetAccount(r.Context().Value("id").(uuid.UUID))
+
+	// Get the user db record
+	dbRecord, err := db.GetAccount(ud.ID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -97,7 +101,8 @@ func RenderDashboard(w http.ResponseWriter, r *http.Request) {
 	pd := pageData{
 		LoggedIn:  true,
 		PageTitle: "Dashboard",
-		Account:   a,
+		UserData:  ud,
+		Account:   dbRecord,
 	}
 
 	// Parse the templates
