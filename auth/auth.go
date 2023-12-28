@@ -50,11 +50,18 @@ func createSession(a Account) {
 }
 
 // Get a session from the store
-func getSession(sessionID string) (uuid.UUID, bool) {
+func getSession(pk string) (*Account, error) {
+	a, err := Decrypt(pk)
+	if err != nil {
+		return &Account{}, err
+	}
 	storeMutex.Lock()
-	session, found := sessionStore[sessionID]
+	a, found := sessionStore[a.ID]
 	storeMutex.Unlock()
-	return session, found
+	if !found {
+		return &Account{}, errors.New("session not found")
+	}
+	return &a, nil
 }
 
 // Delete a session from the store

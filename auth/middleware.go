@@ -15,13 +15,13 @@ func MandateSession(next http.Handler) http.Handler {
 			redirectToLogin(w, r)
 			return
 		}
-		id, ok := getSession(cookie.Value)
-		if !ok {
+		a, err := getSession(cookie.Value)
+		if err != nil {
 			log.Println("invalid session cookie: ", cookie.Value)
 			redirectToLogin(w, r)
 			return
 		}
-		ctx := context.WithValue(r.Context(), "id", id)
+		ctx := context.WithValue(r.Context(), "id", a.ID)
 		ctx = context.WithValue(ctx, "session_id", cookie.Value)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
@@ -42,9 +42,9 @@ func CheckSession(next http.Handler) http.Handler {
 		ctx := r.Context()
 		cookie, err := r.Cookie("session_id")
 		if err == nil {
-			id, ok := getSession(cookie.Value)
-			if ok {
-				ctx = context.WithValue(ctx, "id", id)
+			a, err := getSession(cookie.Value)
+			if err == nil {
+				ctx = context.WithValue(ctx, "id", a.ID)
 				ctx = context.WithValue(ctx, "session_id", cookie.Value)
 			}
 		}
