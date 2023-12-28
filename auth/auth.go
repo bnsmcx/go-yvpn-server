@@ -3,12 +3,19 @@ package auth
 import (
 	"crypto/rand"
 	"encoding/hex"
+	"errors"
 	"github.com/google/uuid"
 	"sync"
 )
 
 // sessionStore holds the user sessions
-var sessionStore = make(map[string]uuid.UUID)
+var sessionStore = make(map[uuid.UUID]Account)
+
+// Account holds a user's details
+type Account struct {
+	DigitalOceanToken string
+	ID                uuid.UUID
+}
 
 // Mutex to handle concurrent access to the sessionStore
 var storeMutex sync.Mutex
@@ -39,4 +46,14 @@ func deleteSession(sessionID string) {
 	storeMutex.Lock()
 	delete(sessionStore, sessionID)
 	storeMutex.Unlock()
+}
+
+func GetAccount(id uuid.UUID) (*Account, error) {
+	storeMutex.Lock()
+	a, ok := sessionStore[id]
+	storeMutex.Unlock()
+	if !ok {
+		return &Account{}, errors.New("Account not found")
+	}
+	return &a, nil
 }

@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"yvpn_server/auth"
 	"yvpn_server/db"
 )
 
@@ -17,7 +18,7 @@ func AddToken(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	a, err := db.GetAccount(r.Context().Value("id").(uuid.UUID))
+	a, err := auth.GetAccount(r.Context().Value("id").(uuid.UUID))
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "no account", http.StatusUnauthorized)
@@ -25,12 +26,6 @@ func AddToken(w http.ResponseWriter, r *http.Request) {
 	}
 
 	a.DigitalOceanToken = r.PostFormValue("token")
-	err = a.Save()
-	if err != nil {
-		log.Println(err)
-		http.Error(w, "saving token", http.StatusInternalServerError)
-		return
-	}
 
 	w.Header().Set("HX-Redirect", "/dashboard")
 }
@@ -55,7 +50,7 @@ func HandleDeleteEndpoint(w http.ResponseWriter, r *http.Request) {
 
 	// delete the endpoint on DO
 	accountID := r.Context().Value("id").(uuid.UUID)
-	a, err := db.GetAccount(accountID)
+	a, err := auth.GetAccount(accountID)
 	if err != nil || accountID != e.AccountID {
 		log.Println(err)
 		http.Error(w, "error associating account with endpoint", http.StatusBadRequest)
@@ -89,7 +84,7 @@ func HandleCreateEndpoint(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	a, err := db.GetAccount(r.Context().Value("id").(uuid.UUID))
+	a, err := auth.GetAccount(r.Context().Value("id").(uuid.UUID))
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "no account", http.StatusUnauthorized)

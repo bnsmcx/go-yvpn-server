@@ -24,7 +24,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	id := r.PostFormValue("credit-id")
-	pin := r.PostFormValue("pin")
 
 	uid, err := uuid.Parse(id)
 	if err != nil {
@@ -37,20 +36,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		log.Println("account not found")
 		http.Error(w, "invalid credit id", http.StatusUnauthorized)
 		return
-	}
-
-	if account.Pin != pin {
-		log.Println("failed login attempt, invalid pin")
-		http.Error(w, "invalid pin", http.StatusUnauthorized)
-		return
-	}
-
-	if !account.Activated {
-		if err := account.Activate(); err != nil {
-			log.Println("error activating card")
-			http.Error(w, "", http.StatusInternalServerError)
-			return
-		}
 	}
 
 	sessionID, err := createSession(account.ID)
