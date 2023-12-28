@@ -26,6 +26,12 @@ func AddToken(w http.ResponseWriter, r *http.Request) {
 	}
 
 	a.DigitalOceanToken = r.PostFormValue("token")
+	a.UpdateSessionStore()
+	pk, err := a.Encrypt()
+	if err != nil {
+		log.Println(err)
+	}
+	auth.SetSessionCookie(w, pk)
 
 	w.Header().Set("HX-Redirect", "/dashboard")
 }

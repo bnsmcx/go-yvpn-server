@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/google/uuid"
+	"net/http"
 	"sync"
 )
 
@@ -40,6 +41,12 @@ func (a *Account) Encrypt() (string, error) {
 		return "", err
 	}
 	return hex.EncodeToString(bytes), nil
+}
+
+func (a *Account) UpdateSessionStore() {
+	storeMutex.Lock()
+	sessionStore[a.ID] = *a
+	storeMutex.Unlock()
 }
 
 // Create a session in the store
@@ -79,4 +86,16 @@ func GetAccount(id uuid.UUID) (*Account, error) {
 		return &Account{}, errors.New("Account not found")
 	}
 	return &a, nil
+}
+
+func SetSessionCookie(w http.ResponseWriter, pk string) {
+	cookie := &http.Cookie{
+		Name:     "session_id",
+		Value:    pk,
+		Path:     "/",
+		HttpOnly: true,
+		Secure:   true,
+		SameSite: http.SameSiteStrictMode,
+	}
+	http.SetCookie(w, cookie)
 }

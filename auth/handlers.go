@@ -7,7 +7,7 @@ import (
 )
 
 func HandleLogout(w http.ResponseWriter, r *http.Request) {
-	deleteSession(uuid.MustParse(r.Context().Value("id").(string)))
+	deleteSession(r.Context().Value("id").(uuid.UUID))
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 	return
 }
@@ -32,17 +32,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	createSession(account)
-
-	// Create and set the cookie
-	cookie := &http.Cookie{
-		Name:     "session_id",
-		Value:    pk,
-		Path:     "/",
-		HttpOnly: true,
-		Secure:   true,
-		SameSite: http.SameSiteStrictMode,
-	}
-	http.SetCookie(w, cookie)
-
+	SetSessionCookie(w, pk)
 	http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
 }
