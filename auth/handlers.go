@@ -1,10 +1,8 @@
 package auth
 
 import (
-	"github.com/google/uuid"
 	"log"
 	"net/http"
-	"yvpn_server/db"
 )
 
 func HandleLogout(w http.ResponseWriter, r *http.Request) {
@@ -23,22 +21,16 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	id := r.PostFormValue("credit-id")
+	pk := r.PostFormValue("port-key")
 
-	uid, err := uuid.Parse(id)
+	account, err := Decrypt(pk)
 	if err != nil {
 		log.Println(err)
-		http.Error(w, "Invalid credit id", http.StatusBadRequest)
-		return
-	}
-	account, err := db.GetAccount(uid)
-	if err != nil {
-		log.Println("account not found")
-		http.Error(w, "invalid credit id", http.StatusUnauthorized)
+		http.Error(w, "Invalid port-key", http.StatusBadRequest)
 		return
 	}
 
-	sessionID, err := createSession(account.ID)
+	err = createSession(account)
 	if err != nil {
 		log.Println("error creating session key")
 		http.Error(w, "", http.StatusInternalServerError)
@@ -48,7 +40,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	// Create and set the cookie
 	cookie := &http.Cookie{
 		Name:     "session_id",
-		Value:    sessionID,
+		Value:    pk,
 		Path:     "/",
 		HttpOnly: true,
 		Secure:   true,

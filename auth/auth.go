@@ -3,6 +3,7 @@ package auth
 import (
 	"crypto/rand"
 	"encoding/hex"
+	"encoding/json"
 	"errors"
 	"github.com/google/uuid"
 	"sync"
@@ -11,26 +12,48 @@ import (
 // sessionStore holds the user sessions
 var sessionStore = make(map[uuid.UUID]Account)
 
+// Mutex to handle concurrent access to the sessionStore
+var storeMutex sync.Mutex
+
 // Account holds a user's details
 type Account struct {
 	DigitalOceanToken string
 	ID                uuid.UUID
 }
 
-// Mutex to handle concurrent access to the sessionStore
-var storeMutex sync.Mutex
+func Decrypt(pk string) (Account, error) {
+	bytes, err := hex.DecodeString(pk)
+	if err != nil {
+		return Account{}, err
+	}
+
+	var a Account
+	err = json.Unmarshal(bytes, &a)
+	if err != nil {
+		return Account{}, err
+	}
+	return Account{}, nil
+}
+
+func (a *Account) Encrypt() (string, error) {
+	bytes, err := json.Marshal(a)
+	if err != nil {
+		return "", err
+	}
+	return hex.EncodeToString(bytes), nil
+}
 
 // Create a session in the store
-func createSession(id uuid.UUID) (string, error) {
+func createSession(id Account) error {
 	bytes := make([]byte, 32)
 	if _, err := rand.Read(bytes); err != nil {
-		return "", err
+		return err
 	}
 	sessionID := hex.EncodeToString(bytes)
 	storeMutex.Lock()
 	sessionStore[sessionID] = id
 	storeMutex.Unlock()
-	return sessionID, nil
+	return nil
 }
 
 // Get a session from the store
