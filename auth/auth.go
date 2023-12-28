@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"crypto/rand"
 	"encoding/hex"
 	"encoding/json"
 	"errors"
@@ -44,16 +43,10 @@ func (a *Account) Encrypt() (string, error) {
 }
 
 // Create a session in the store
-func createSession(id Account) error {
-	bytes := make([]byte, 32)
-	if _, err := rand.Read(bytes); err != nil {
-		return err
-	}
-	sessionID := hex.EncodeToString(bytes)
+func createSession(a Account) {
 	storeMutex.Lock()
-	sessionStore[sessionID] = id
+	sessionStore[a.ID] = a
 	storeMutex.Unlock()
-	return nil
 }
 
 // Get a session from the store

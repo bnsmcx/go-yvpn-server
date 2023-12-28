@@ -30,12 +30,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = createSession(account)
-	if err != nil {
-		log.Println("error creating session key")
-		http.Error(w, "", http.StatusInternalServerError)
-		return
-	}
+	createSession(account)
 
 	// Create and set the cookie
 	cookie := &http.Cookie{
