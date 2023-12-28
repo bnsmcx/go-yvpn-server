@@ -65,9 +65,9 @@ func getSession(pk string) (*Account, error) {
 }
 
 // Delete a session from the store
-func deleteSession(sessionID string) {
+func deleteSession(id uuid.UUID) {
 	storeMutex.Lock()
-	delete(sessionStore, sessionID)
+	delete(sessionStore, id)
 	storeMutex.Unlock()
 }
 
