@@ -1,12 +1,13 @@
 package auth
 
 import (
+	"github.com/google/uuid"
 	"log"
 	"net/http"
 )
 
 func HandleLogout(w http.ResponseWriter, r *http.Request) {
-	deleteSession(r.Context().Value("session_id").(string))
+	deleteSession(uuid.MustParse(r.Context().Value("id").(string)))
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 	return
 }
