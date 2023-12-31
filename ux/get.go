@@ -169,26 +169,15 @@ func RenderAddEndpoint(w http.ResponseWriter, r *http.Request) {
 
 func RenderNewCreditNode(w http.ResponseWriter, r *http.Request, portkey string) {
 	// Parse the templates
-	var tmpl *template.Template
-	var err error
-
-	if r.Header.Get("Hx-Request") == "true" {
-		tmpl, err = template.ParseFiles("templates/credit_node.html")
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-	} else {
-		tmpl, err = template.ParseFiles("templates/base.html", "templates/credit_node.html")
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
+	tmpl, err := template.ParseFiles("templates/base.html", "templates/credit_node.html")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	// populate page data
 	pd := pageData{
-		LoggedIn:  false,
+		LoggedIn:  r.Context().Value("id") != nil,
 		PageTitle: "New Credit",
 		PortKey:   portkey,
 	}
