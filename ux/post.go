@@ -61,7 +61,7 @@ func AddToken(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 	}
-	auth.SetSessionCookie(w, pk)
 
-	w.Header().Set("HX-Redirect", "/dashboard")
+	auth.SetSessionCookie(w, pk)
+	RenderNewCreditNode(w, r, pk)
 }
