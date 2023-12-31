@@ -1,6 +1,7 @@
 package ux
 
 import (
+	"github.com/google/uuid"
 	"log"
 	"net/http"
 	"yvpn_server/auth"
@@ -37,4 +38,30 @@ func PurchaseHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	RenderNewCreditNode(w, r, portkey)
+}
+
+func AddToken(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "parsing form", http.StatusBadRequest)
+		return
+	}
+
+	a, err := auth.GetAccount(r.Context().Value("id").(uuid.UUID))
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "no account", http.StatusUnauthorized)
+		return
+	}
+
+	a.DigitalOceanToken = r.PostFormValue("token")
+	a.UpdateSessionStore()
+	pk, err := a.Encrypt()
+	if err != nil {
+		log.Println(err)
+	}
+	auth.SetSessionCookie(w, pk)
+
+	w.Header().Set("HX-Redirect", "/dashboard")
 }

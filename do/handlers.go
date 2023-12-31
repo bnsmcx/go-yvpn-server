@@ -10,32 +10,6 @@ import (
 	"yvpn_server/db"
 )
 
-func AddToken(w http.ResponseWriter, r *http.Request) {
-	err := r.ParseForm()
-	if err != nil {
-		log.Println(err)
-		http.Error(w, "parsing form", http.StatusBadRequest)
-		return
-	}
-
-	a, err := auth.GetAccount(r.Context().Value("id").(uuid.UUID))
-	if err != nil {
-		log.Println(err)
-		http.Error(w, "no account", http.StatusUnauthorized)
-		return
-	}
-
-	a.DigitalOceanToken = r.PostFormValue("token")
-	a.UpdateSessionStore()
-	pk, err := a.Encrypt()
-	if err != nil {
-		log.Println(err)
-	}
-	auth.SetSessionCookie(w, pk)
-
-	w.Header().Set("HX-Redirect", "/dashboard")
-}
-
 func HandleDeleteEndpoint(w http.ResponseWriter, r *http.Request) {
 	endpointID, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
