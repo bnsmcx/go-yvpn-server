@@ -15,8 +15,14 @@ header {
     background-color: #254645;
 }
 
-p {
+.article {
     padding: .5rem 2rem;
+}
+
+.article > .button {
+    text-align: left;
+    display: flex;
+    justify-content: center;
 }
 
 .navbar {
