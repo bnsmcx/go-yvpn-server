@@ -1,9 +1,23 @@
 {{define "content"}}
 <form>
-    <label class="form-group">
-        PortKey:
-        <input type="text" value="{{ .PortKey }}" readonly>
-    </label>
+    <label for="portkey">PortKey:</label>
+    <input id="portkey" type="text" value="{{ .PortKey }}" readonly>
+    <script>
+        document.getElementById("portkey").addEventListener("click", function() {
+            const originalValue = this.value; // Store the original value
+            navigator.clipboard.writeText(originalValue)
+                .then(() => {
+                    this.value = 'Copied to clipboard!'; // Temporarily change the value of the input
+                    setTimeout(() => {
+                        this.value = originalValue; // Revert to the original value after 1.5 seconds
+                    }, 1500);
+                })
+                .catch(err => {
+                    console.error('Error in copying text: ', err);
+                });
+        });
+    </script>
+</form>
     <p>
         This string contains your user data, specifically your Digital Ocean API
         token, and is used like a password to log in and manage your account.
@@ -16,5 +30,4 @@
         If you update your Digital Ocean token you'll be provided a new PortKey
         which you should again store in your password manager, replacing the original.
     </p>
-</form>
 {{end}}
