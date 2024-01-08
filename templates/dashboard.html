@@ -1,6 +1,6 @@
 {{define "content"}}
 <div id="endpoints">
-    <form action="/token/add" method="post">
+    <form id="settings" action="/token/add" method="post">
         <label class="setting">
             Digital Ocean Token:
             <input type="text" name="token" value="{{.UserData.DigitalOceanToken}}">
