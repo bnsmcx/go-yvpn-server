@@ -15,6 +15,10 @@ header {
     background-color: #254645;
 }
 
+p {
+    padding: .5rem 2rem;
+}
+
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -158,6 +162,8 @@ details > summary::-webkit-details-marker {
 }
 
 dialog {
+    position: fixed;
+    top: -50%;
     text-align: center;
     border-radius: 10px;
     border: 1px solid #254645;
@@ -184,6 +190,7 @@ dialog {
 
 #portkey {
     width: 90%;
+    margin-top: .5rem;
     cursor: pointer;
 }
 
