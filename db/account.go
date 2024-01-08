@@ -7,17 +7,8 @@ import (
 
 // Account defines the Account record
 type Account struct {
-	ID                uuid.UUID `gorm:"type:uuid;primaryKey;"`
-	Activated         bool
-	BearerToken       string
-	DigitalOceanToken string
-	Endpoints         []Endpoint `gorm:"foreignKey:AccountID"`
-	Pin               string
-}
-
-func (a *Account) Activate() error {
-	a.Activated = true
-	return a.Save()
+	ID        uuid.UUID  `gorm:"type:uuid;primaryKey;"`
+	Endpoints []Endpoint `gorm:"foreignKey:AccountID"`
 }
 
 func (a *Account) Save() error {

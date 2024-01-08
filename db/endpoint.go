@@ -21,9 +21,24 @@ type Endpoint struct {
 
 type Client struct {
 	ID         uuid.UUID `gorm:"primaryKey"`
+	Active     bool
 	EndpointID int
 	Config     string
 	QR         string
+	Name       string
+}
+
+func (c *Client) Save() error {
+	result := database.Save(c)
+	if result.Error != nil {
+		return fmt.Errorf("saving client config: %s", result.Error)
+	}
+	return nil
+}
+
+func (c *Client) Delete() error {
+	result := database.Delete(c)
+	return result.Error
 }
 
 func (e *Endpoint) Save() error {
@@ -56,6 +71,7 @@ func (e *Endpoint) AddClient(clientIP string, privKey wgtypes.Key) error {
 
 	e.Clients = append(e.Clients, Client{
 		ID:         uuid.New(),
+		Name:       "Your new client",
 		EndpointID: e.ID,
 		Config:     config,
 		QR:         qr,
@@ -67,4 +83,20 @@ func (e *Endpoint) AddClient(clientIP string, privKey wgtypes.Key) error {
 func (e *Endpoint) Delete() error {
 	result := database.Delete(e)
 	return result.Error
+}
+
+func (e *Endpoint) DeleteClientConfigsForEndpoint() {
+	for _, c := range e.Clients {
+		database.Delete(c)
+	}
+}
+
+func (e *Endpoint) ActivateClient() error {
+	for _, c := range e.Clients {
+		if !c.Active {
+			c.Active = true
+			return c.Save()
+		}
+	}
+	return nil
 }

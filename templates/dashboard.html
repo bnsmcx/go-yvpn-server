@@ -1,29 +1,71 @@
 {{define "content"}}
-<h2>Dashboard</h2>
-<div id="settings">
-    <h3>Settings</h3>
-    <div><b><a href="/logout">Logout</a></div>
-    <div>
-        <b>Digital Ocean Token: </b>
-        {{if .Account.DigitalOceanToken}}{{.Account.DigitalOceanToken}}{{else}}<em>None</em>{{end}}
-        <button hx-get="/token/add" hx-target="#settings">Edit</button>
-    </div>
-</div>
+<script type="text/javascript">
+    function confirmSubmission() {
+        var confirmAction = confirm("Are you sure you want to overwrite your token?");
+        if (confirmAction) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+</script>
 <div id="endpoints">
-    <h3>Endpoints</h3>
-    <button hx-get="/endpoints/add" hx-target="#endpoints">Add</button>
+    <form id="settings" action="/token/add" method="post" onsubmit="return confirmSubmission()">
+        <label class="setting">
+            Digital Ocean Token:
+            <input type="text" name="token" value="{{.UserData.DigitalOceanToken}}">
+            <input class="button" type="submit" value="[ Update ]">
+        </label>
+    </form>
+    <button class="button" hx-get="/endpoints/add" hx-target="#endpoints">[ Add Endpoint ]</button>
     {{range .Account.Endpoints}}
     <details>
-        <summary>{{.ID}} | {{.Datacenter}} | {{.IP}}</summary>
-        <button hx-delete="/endpoints/{{.ID}}" hx-target="#endpoints">Delete</button>
-        {{range .Clients}}
-        <details>
-            <summary>{{.ID}}</summary>
-            <pre>{{.Config}}</pre>
-            <a href="/endpoints/{{.EndpointID}}/{{.ID}}">Download</a>
-            <img src="data:image/png;base64,{{.QR}}" alt="QR Code">
-        </details>
-        {{end}}
+        <summary class="button">{{.Datacenter}} | {{if .IP}}{{.IP}}{{else}}Spawning...{{end}}</summary>
+        <div class="details-contents">
+            <button class="button" hx-delete="/endpoints/{{.ID}}" hx-target="#endpoints">[ Delete Endpoint ]</button>
+            <a href="/client/{{.ID}}" class="button">[ Add Device ]</a>
+            {{range .Clients}}
+                {{if .Active}}
+                    <details>
+                        <summary class="button">{{.Name}}</summary>
+                        <div class="config">
+                            <div>
+                                <button class="button" hx-delete="/client/{{.ID}}">[ Delete ]</button>
+                                <button class="button" id="rename-{{.ID}}">[ Rename ]</button>
+                            </div>
+                            <h3>Client Config:</h3>
+                            <pre>{{.Config}}</pre>
+                            <a class="button" href="/endpoints/{{.EndpointID}}/{{.ID}}">[ Download ]</a>
+                            <p></p>
+                            <h3>Scan with the WireGuard app:</h3>
+                            <img src="data:image/png;base64,{{.QR}}" alt="QR Code">
+                        </div>
+                    </details>
+                    <dialog id="rename-{{.ID}}-dialog">
+                        <div class="details-contents">
+                            <form action="/client/{{.ID}}" method="post">
+                                <label class="setting">
+                                    Device Name:
+                                    <input type="text" name="name" value="{{.Name}}">
+                                    <input class="button" type="submit" value="[ Rename ]">
+                                </label>
+                            </form>
+                        </div>
+                        <button class="button" id="close-rename-{{.ID}}-dialog">[ Close ]</button>
+                    </dialog>
+                    <script>
+                        // JavaScript to handle the dialog open and close
+                        document.getElementById('rename-{{.ID}}').addEventListener('click', function() {
+                            document.getElementById('rename-{{.ID}}-dialog').showModal();
+                        });
+
+                        document.getElementById('close-rename-{{.ID}}-dialog').addEventListener('click', function() {
+                            document.getElementById('rename-{{.ID}}-dialog').close();
+                        });
+                    </script>
+                {{end}}
+            {{end}}
+        </div>
     </details>
     {{end}}
 </div>

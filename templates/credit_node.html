@@ -1,13 +1,35 @@
 {{define "content"}}
-<div class="card">
-    <h2>Card Title</h2>
-    <label>
-        ID
-        <input type="text" value="{{ .ID }}" readonly>
-    </label>
-    <label>
-        PIN
-        <input type="text" value="{{ .Pin }}" readonly>
-    </label>
+<form>
+    <label for="portkey"><b>PortKey:</b></label>
+    <input id="portkey" type="text" value="{{ .PortKey }}" readonly>
+    <script>
+        document.getElementById("portkey").addEventListener("click", function() {
+            const originalValue = this.value; // Store the original value
+            navigator.clipboard.writeText(originalValue)
+                .then(() => {
+                    this.value = 'Copied to clipboard!'; // Temporarily change the value of the input
+                    setTimeout(() => {
+                        this.value = originalValue; // Revert to the original value after 1.5 seconds
+                    }, 1500);
+                })
+                .catch(err => {
+                    console.error('Error in copying text: ', err);
+                });
+        });
+    </script>
+</form>
+<div class="article">
+    <p>
+        This string contains your user data, specifically your Digital Ocean API
+        token, and is used like a password to log in and manage your account.
+    <p>
+        yVPN never stores this data.  Instead, it's encrypted and stored
+        right in this string called a PortKey.  When you log in to yVPN to manage
+        your account the data is decrypted and used.
+    </p>
+    <p>
+        If you update your Digital Ocean token you'll be provided a new PortKey
+        which you should again store in your password manager, replacing the original.
+    </p>
 </div>
 {{end}}

@@ -4,11 +4,11 @@ import (
 	"github.com/google/uuid"
 	"log"
 	"net/http"
-	"yvpn_server/db"
 )
 
 func HandleLogout(w http.ResponseWriter, r *http.Request) {
-	deleteSession(r.Context().Value("session_id").(string))
+	deleteSession(r.Context().Value("id").(uuid.UUID))
+	SetSessionCookie(w, "")
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 	return
 }
@@ -23,53 +23,16 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	id := r.PostFormValue("credit-id")
-	pin := r.PostFormValue("pin")
+	pk := r.PostFormValue("portkey")
 
-	uid, err := uuid.Parse(id)
+	account, err := Decrypt(pk)
 	if err != nil {
 		log.Println(err)
-		http.Error(w, "Invalid credit id", http.StatusBadRequest)
-		return
-	}
-	account, err := db.GetAccount(uid)
-	if err != nil {
-		log.Println("account not found")
-		http.Error(w, "invalid credit id", http.StatusUnauthorized)
+		http.Error(w, "Invalid port-key", http.StatusBadRequest)
 		return
 	}
 
-	if account.Pin != pin {
-		log.Println("failed login attempt, invalid pin")
-		http.Error(w, "invalid pin", http.StatusUnauthorized)
-		return
-	}
-
-	if !account.Activated {
-		if err := account.Activate(); err != nil {
-			log.Println("error activating card")
-			http.Error(w, "", http.StatusInternalServerError)
-			return
-		}
-	}
-
-	sessionID, err := createSession(account.ID)
-	if err != nil {
-		log.Println("error creating session key")
-		http.Error(w, "", http.StatusInternalServerError)
-		return
-	}
-
-	// Create and set the cookie
-	cookie := &http.Cookie{
-		Name:     "session_id",
-		Value:    sessionID,
-		Path:     "/",
-		HttpOnly: true,
-		Secure:   true,
-		SameSite: http.SameSiteStrictMode,
-	}
-	http.SetCookie(w, cookie)
-
+	createSession(account)
+	SetSessionCookie(w, pk)
 	http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
 }

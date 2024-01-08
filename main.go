@@ -52,14 +52,16 @@ func main() {
 
 		r.Get("/dashboard", ux.RenderDashboard)
 		r.Get("/logout", auth.HandleLogout)
-		r.Get("/token/add", ux.RenderAddToken)
 		r.Get("/endpoints/add", ux.RenderAddEndpoint)
 		r.Get("/endpoints/{endpoint}/{client}", db.GetClientConfigFile)
+		r.Get("/client/{endpoint}", ux.ActivateClient)
 
 		r.Delete("/endpoints/{id}", do.HandleDeleteEndpoint)
+		r.Delete("/client/{id}", db.HandleDeleteClient)
 
+		r.Post("/client/{id}", db.HandleRenameClient)
 		r.Post("/endpoints/add", do.HandleCreateEndpoint)
-		r.Post("/token/add", do.AddToken)
+		r.Post("/token/add", ux.AddToken)
 	})
 
 	log.Fatalln(http.ListenAndServe(":8000", r))

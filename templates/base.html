@@ -10,11 +10,29 @@
     <body>
         <header>
             <nav class="navbar">
-                <h1><a class="button nav-item-left" href="/"><b>[</b> yVPN <b>]</b></a></h1>
+                <h1 class="nav-item-left"><b>{</b> {{.PageTitle}} <b>}</b></h1>
                 <div class="nav-space"></div>
+                {{if .LoggedIn}}
+                <a class="button" href="/dashboard"><b>[</b> Dashboard <b>]</b></a>
+                <a class="button" href="/logout"><b>[</b> Logout <b>]</b></a>
+                {{else}}
                 <a class="button" href="/purchase"><b>[</b> Purchase <b>]</b></a>
-                <a class="button" href="/dashboard"><b>[</b> Manage <b>]</b></a>
+                <a class="button" href="/dashboard"><b>[</b> Login <b>]</b></a>
+                {{end}}
             </nav>
+            <details class="mobile-nav">
+                <summary class="button">
+                    <span><b>{</b> {{.PageTitle}} <b>}</b></span><img src="/static/images/burger.svg" alt="Menu" />
+                </summary>
+                <a class="button" href="/"><b>[</b> yVPN <b>]</b></a>
+                {{if .LoggedIn}}
+                <a class="button" href="/dashboard"><b>[</b> Dashboard <b>]</b></a>
+                <a class="button" href="/logout"><b>[</b> Logout <b>]</b></a>
+                {{else}}
+                <a class="button" href="/purchase"><b>[</b> Purchase <b>]</b></a>
+                <a class="button" href="/dashboard"><b>[</b> Login <b>]</b></a>
+                {{end}}
+            </details>
         </header>
 
         <main>
