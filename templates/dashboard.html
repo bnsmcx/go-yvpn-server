@@ -57,8 +57,8 @@
     <div id="settings" class="details-contents">
         <label class="setting">
             Digital Ocean Token:
-            {{if .Account.DigitalOceanToken}}
-            <input type="text" name="pin" value="{{.Account.DigitalOceanToken}}">
+            {{if .UserData.DigitalOceanToken}}
+            <input readonly type="text" name="pin" value="{{.UserData.DigitalOceanToken}}">
             <input hx-get="/token/add" hx-target="#settings" class="button" type="submit" value="[ Edit ]">
             {{else}}
             <input hx-get="/token/add" hx-target="#settings" class="button" type="submit" value="[ Add ]">

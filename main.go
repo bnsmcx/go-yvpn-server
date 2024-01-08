@@ -62,7 +62,7 @@ func main() {
 
 		r.Post("/client/{id}", db.HandleRenameClient)
 		r.Post("/endpoints/add", do.HandleCreateEndpoint)
-		r.Post("/token/add", do.AddToken)
+		r.Post("/token/add", ux.AddToken)
 	})
 
 	log.Fatalln(http.ListenAndServe(":8000", r))

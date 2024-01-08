@@ -1,12 +1,20 @@
 {{define "content"}}
 <form>
     <label class="form-group">
-        ID
-        <input type="text" value="{{ .Account.ID }}" readonly>
+        PortKey:
+        <input type="text" value="{{ .PortKey }}" readonly>
     </label>
-    <label class="form-group">
-        PIN
-        <input type="text" value="{{ .Account.Pin }}" readonly>
-    </label>
+    <p>
+        This string contains your user data, specifically your Digital Ocean API
+        token, and is used like a password to log in and manage your account.
+    <p>
+        yVPN never stores this data.  Instead, it's encrypted and stored
+        right in this string called a PortKey.  When you log in to yVPN to manage
+        your account the data is decrypted and used.
+    </p>
+    <p>
+        If you update your Digital Ocean token you'll be provided a new PortKey
+        which you should again store in your password manager, replacing the original.
+    </p>
 </form>
 {{end}}

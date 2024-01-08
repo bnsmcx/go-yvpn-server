@@ -1,6 +1,7 @@
 package ux
 
 import (
+	"github.com/google/uuid"
 	"log"
 	"net/http"
 	"yvpn_server/auth"
@@ -18,7 +19,8 @@ func PurchaseHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	newAccount := auth.NewCreditNode{
-		InviteCode: r.PostFormValue("invite-code"),
+		InviteCode:        r.PostFormValue("invite-code"),
+		DigitalOceanToken: r.PostFormValue("do-token"),
 	}
 
 	account, err := newAccount.Create()
@@ -29,5 +31,37 @@ func PurchaseHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	log.Printf("Created new account: %s", account.ID.String())
-	RenderNewCreditNode(w, r, account.ID)
+	portkey, err := account.Encrypt()
+	if err != nil {
+		log.Println("Creating new account: " + err.Error())
+		http.Error(w, "Invalid invite code", http.StatusBadRequest)
+		return
+	}
+	RenderNewCreditNode(w, r, portkey)
+}
+
+func AddToken(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "parsing form", http.StatusBadRequest)
+		return
+	}
+
+	a, err := auth.GetAccount(r.Context().Value("id").(uuid.UUID))
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "no account", http.StatusUnauthorized)
+		return
+	}
+
+	a.DigitalOceanToken = r.PostFormValue("token")
+	a.UpdateSessionStore()
+	pk, err := a.Encrypt()
+	if err != nil {
+		log.Println(err)
+	}
+
+	auth.SetSessionCookie(w, pk)
+	RenderNewCreditNode(w, r, pk)
 }
